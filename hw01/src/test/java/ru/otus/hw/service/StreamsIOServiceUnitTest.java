@@ -1,24 +1,24 @@
 package ru.otus.hw.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.PrintStream;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+@ExtendWith(MockitoExtension.class)
 class StreamsIOServiceUnitTest {
+    @InjectMocks
+    private StreamsIOService streamsIOService;
 
-    private StreamsIOService underTest;
+    @Mock
     private PrintStream printStream;
-
-    @BeforeEach
-    void setUp() {
-        printStream = Mockito.mock(PrintStream.class);
-        underTest = new StreamsIOService(printStream);
-    }
 
     @Test
     @DisplayName("should 'println' happened once when invoke method 'printLine'")
@@ -27,10 +27,11 @@ class StreamsIOServiceUnitTest {
         String testString = "Test string";
 
         // WHEN
-        underTest.printLine(testString);
+        streamsIOService.printLine(testString);
 
         // THEN
         verify(printStream).println(testString);
+        verifyNoMoreInteractions(printStream);
     }
 
     @Test
@@ -41,7 +42,7 @@ class StreamsIOServiceUnitTest {
         String resultString = testString.concat("%n");
 
         // WHEN
-        underTest.printFormattedLine(testString);
+        streamsIOService.printFormattedLine(testString);
 
         // THEN
         verify(printStream).printf(resultString);
