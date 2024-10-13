@@ -1,0 +1,2 @@
+# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+What is not a collection in Java?;ArrayList%false|HashSet%false|Array%true|LinkedHashSet%false
