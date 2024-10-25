@@ -1,0 +1,10 @@
+# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+Есть ли жизнь на Марсе?;Это науке пока не известно%true|Конечно. Красные (НЛО) это с Марса. А зеленые (НЛО) с Венеры%false|Точно нет%false
+Как нужно загружать ресурс из jar в Java?;ClassLoader#geResourceAsStream или ClassPathResource#getInputStream%true|ClassLoader#geResource#getFile + FileReader%false|Wingardium Leviosa%false
+Какой предпочтительный способ реакции на исключения?;@SneakyThrow%false|e.printStackTrace()%false|Проброс дальше с предварительным оборачиванием в бизнес-исключение (например, QuestionReadException)%true|Игнорирование исключения%false
+Кто является основателем Java?;Джеймс Гослинг%true|Деннис Ритчи%false|Бьорн Страуструп%false|Расмус Лердорф%false
+Какой язык программирования низкоуровневый?;Delphi%false|Java%false|PHP%false|Ассемблер%true
+Сколько байт в 1 килобайте?;1000%false|1224%false|1024%true|8%false
+Сколько фрагментов в 1 байте?;1%false|10%false|8%true|4%false
+Какое самое большое море в мире?;Саргассово море%true|Аравийское море% false|Филиппинское море% false|Коралловое море% false
+Кто написал произведение "Аллилуйя"?;Рихард Вагнер%false|Моцарт% false|Фридрих Гендель%true|Иоганн Штраус% false
