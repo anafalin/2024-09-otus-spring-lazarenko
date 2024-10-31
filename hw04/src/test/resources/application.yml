@@ -1,0 +1,19 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+
+test:
+  rightAnswersCountToPass: 4
+  locale: ru-RU
+  fileNameByLocaleTag:
+    ru-RU: questions_ru.csv
+    en-US: questions.csv
+
+logging:
+  level:
+    org:
+      springframework:
+        test:
+          context:
+            cache: debug
