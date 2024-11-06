@@ -1,0 +1,65 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-table-authors" author="Lazarenko Anastasia">
+        <createTable tableName="authors" remarks="Create table authors">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="full_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-books" author="Lazarenko Anastasia">
+        <createTable tableName="books" remarks="Create table books">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="bigserial">
+                <constraints foreignKeyName="book_author_id_author_id"
+                             referencedTableName="authors"
+                             referencedColumnNames="id"
+                             deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-genres" author="Lazarenko Anastasia">
+        <createTable tableName="genres" remarks="Create table genres">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-books_genres" author="Lazarenko Anastasia">
+        <createTable tableName="books_genres">
+            <column name="book_id" type="bigint">
+                <constraints foreignKeyName="books_genres_book_id"
+                             referencedTableName="books"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                             nullable="false"/>
+            </column>
+            <column name="genre_id" type="bigint">
+                <constraints foreignKeyName="books_genres_genre_id"
+                             referencedTableName="genres"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                             nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="books_genres" columnNames="book_id, genre_id"/>
+    </changeSet>
+</databaseChangeLog>
