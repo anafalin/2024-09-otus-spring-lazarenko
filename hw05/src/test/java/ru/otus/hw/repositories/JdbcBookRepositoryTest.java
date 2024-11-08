@@ -44,7 +44,7 @@ class JdbcBookRepositoryTest {
     @DisplayName("должен загружать книгу по id")
     @ParameterizedTest
     @MethodSource("getDbBooks")
-    void findById_returnCorrectBookById_bookExists(Book expectedBook) {
+    void findById_correctBookById_bookExists(Book expectedBook) {
         var actualBook = repositoryJdbc.findById(expectedBook.getId());
         assertThat(actualBook).isPresent()
                 .get()
@@ -53,14 +53,14 @@ class JdbcBookRepositoryTest {
 
     @DisplayName("должен возвращать пустой Optional")
     @Test
-    void findById_returnEmptyOptional_whenBookNotFound() {
+    void findById_emptyOptional_whenBookNotFound() {
         Optional<Book> result = repositoryJdbc.findById(100);
         assertThat(result).isEmpty();
     }
 
     @DisplayName("должен загружать список всех книг")
     @Test
-    void findAll_returnCorrectNotEmptyBooksList_booksExist() {
+    void findAll_correctNotEmptyBooksList_booksExist() {
         var actualBooks = repositoryJdbc.findAll();
         var expectedBooks = dbBooks;
 
