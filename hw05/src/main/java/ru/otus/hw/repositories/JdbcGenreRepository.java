@@ -27,15 +27,15 @@ public class JdbcGenreRepository implements GenreRepository {
     @Override
     public List<Genre> findAllByIds(Set<Long> ids) {
         Map<String, Object> params = Collections.singletonMap("ids", ids);
-        return jdbc.queryForList(
-                "select id, name from generes where id =: ids", params, Genre.class);
+        return jdbc.query(
+                "select id, name from genres where id in (:ids)", params, new GenreRowMapper());
     }
 
     private static class GenreRowMapper implements RowMapper<Genre> {
         @Override
-        public Genre mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getLong("id");
-            String name = resultSet.getString("name");
+        public Genre mapRow(ResultSet rs, int i) throws SQLException {
+            long id = rs.getLong("id");
+            String name = rs.getString("name");
             return new Genre(id, name);
         }
     }
