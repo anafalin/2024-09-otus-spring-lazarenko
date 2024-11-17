@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: none #режим DDL
+    show-sql: false #печать sql-запросы
+    generate-ddl: false #инициализация схемы при запуске
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    enabled: true
