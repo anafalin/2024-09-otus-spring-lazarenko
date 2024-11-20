@@ -7,7 +7,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none #режим DDL
-    show-sql: false #печать sql-запросы
+    show-sql: true #печать sql-запросы
     generate-ddl: false #инициализация схемы при запуске
 
   liquibase:

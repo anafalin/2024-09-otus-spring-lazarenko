@@ -52,7 +52,7 @@ public class GeneratorData {
                         id -> id,
                         id -> List.of(new Comment(id,
                                 "Comment to book_" + id,
-                                LocalDate.now(),
+                                LocalDate.of(2024, 11, 17),
                                 dbBooks.get(id.intValue())))
                 ));
     }
@@ -63,7 +63,7 @@ public class GeneratorData {
                 .boxed()
                 .map(id -> new Comment(id,
                         "Comment to book_" + id,
-                        LocalDate.now(),
+                        LocalDate.of(2024, 11, 17),
                         dbBooks.get(id.intValue())))
                 .toList();
     }

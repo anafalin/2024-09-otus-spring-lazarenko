@@ -18,6 +18,7 @@ public class BookCommands {
 
     private final BookConverter bookConverter;
 
+    // ab
     @ShellMethod(value = "Find all books", key = "ab")
     public String findAllBooks() {
         return bookService.findAll().stream()
@@ -25,6 +26,7 @@ public class BookCommands {
                 .collect(Collectors.joining("," + System.lineSeparator()));
     }
 
+    // bbid 1
     @ShellMethod(value = "Find book by id", key = "bbid")
     public String findBookById(long id) {
         return bookService.findById(id)

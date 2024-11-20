@@ -9,6 +9,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.mapper.AuthorMapperImpl;
+import ru.otus.hw.mapper.BookMapperImpl;
+import ru.otus.hw.mapper.CommentMapperImpl;
+import ru.otus.hw.mapper.GenreMapperImpl;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.JpaAuthorRepository;
@@ -18,80 +23,103 @@ import ru.otus.hw.repositories.JpaGenreRepository;
 import ru.otus.hw.testObjects.GeneratorData;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Сервис по работе с комментариями ")
 @DataJpaTest
-@Import({BookServiceImpl.class,
-        JpaBookRepository.class, JpaAuthorRepository.class, JpaGenreRepository.class, JpaCommentRepository.class,
-        CommentServiceImpl.class})
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Import({CommentServiceImpl.class, JpaCommentRepository.class, JpaBookRepository.class, JpaAuthorRepository.class,
+        JpaGenreRepository.class,
+        CommentMapperImpl.class, BookMapperImpl.class, AuthorMapperImpl.class, GenreMapperImpl.class})
+@Transactional(propagation = Propagation.NEVER)
 public class CommentServiceImplTest {
 
     @Autowired
-    private CommentServiceImpl commentService;
+    private CommentService commentService;
 
     private List<Book> dbBooks;
 
     private List<Comment> dbComments;
 
+    private Map<Long, List<Comment>> dbMapCommentsByIdBook;
+
     @BeforeEach
     void setUp() {
         dbBooks = GeneratorData.getDbBooks();
         dbComments = GeneratorData.getDbComments();
+        dbMapCommentsByIdBook = GeneratorData.getDbMapCommentsByIdBook();
     }
 
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен находить комментарий по id")
     @Test
-    void shouldReturnCommentById() {
+    void findById_optionalNotEmpty_commentExists() {
         // input data
         Comment expectedComment = dbComments.get(0);
 
         // testing
-        Optional<Comment> actualComment = commentService.findById(expectedComment.getId());
+        Optional<CommentDto> actualComment = commentService.findById(expectedComment.getId());
 
         // verification
         assertThat(actualComment).isPresent();
-        assertThat(actualComment.get())
-                .usingRecursiveComparison()
-                .ignoringFields("book")
-                .isEqualTo(expectedComment);
+        assertAll(
+                () -> assertThat(actualComment.get().getId()).isEqualTo(expectedComment.getId()),
+                () -> assertThat(actualComment.get().getText()).isEqualTo(expectedComment.getText()),
+                () -> assertThat(actualComment.get().getCreatedAt()).isEqualTo(expectedComment.getCreatedAt())
+        );
     }
 
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    @DisplayName("должен создавать новый комментарий к книге")
+    @DisplayName("должен находить комментарии по id книги")
     @Test
-    void shouldInsertNewComment() {
+    void findByBookId_comments_commentsExist() {
+        // input data
+        Long bookId = dbBooks.get(0).getId();
+        List<Comment> expectedComments = dbMapCommentsByIdBook.get(bookId);
+
+        // testing
+        List<CommentDto> actualComments = commentService.findByBookId(bookId);
+
+        // verification
+        assertAll(
+                () -> assertThat(actualComments).isNotEmpty(),
+                () -> assertThat(actualComments.size()).isEqualTo(expectedComments.size()),
+                () -> assertThat(actualComments.get(0).getId()).isEqualTo(expectedComments.get(0).getId()),
+                () -> assertThat(actualComments.get(0).getText()).isEqualTo(expectedComments.get(0).getText()));
+    }
+
+    @DisplayName("должен создавать новый комментарий к книге")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    @Test
+    void insert_savedNewComment_commentRequestIsCorrect() {
         // input data
         String text = "New Comment to book";
         Book book = dbBooks.get(0);
 
         // testing
-        Comment insertedComment = commentService.insert(book.getId(), text);
+        CommentDto insertedComment = commentService.insert(book.getId(), text);
 
         // verification
         assertNotNull(insertedComment);
         assertThat(insertedComment.getText()).isEqualTo(text);
-        assertThat(insertedComment.getBook().getId()).isEqualTo(book.getId());
+        assertThat(insertedComment.getBookId()).isEqualTo(book.getId());
     }
 
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен обновлять комментарий по id")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
-    void shouldUpdateComment() {
+    void update_updatedComment_commentRequestIsCorrect() {
         // input data
         Comment expectedComment = dbComments.get(0);
         String updatedText = "New updated text";
 
-        Optional<Comment> optionalComment = commentService.findById(expectedComment.getId());
+        Optional<CommentDto> optionalComment = commentService.findById(expectedComment.getId());
         assertThat(optionalComment).isPresent();
 
         // testing
-        Comment updatedComment = commentService.update(expectedComment.getId(), updatedText);
+        CommentDto updatedComment = commentService.update(expectedComment.getId(), updatedText);
 
         // verification
         assertNotNull(updatedComment);
@@ -99,21 +127,21 @@ public class CommentServiceImplTest {
         assertThat(updatedComment.getText()).isEqualTo(updatedText);
     }
 
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен удалять комментарий по id")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
-    void shouldDeleteComment() {
+    void deleteComment_commentWasDeleted_commentExist() {
         // input data
         Comment testingComment = dbComments.get(0);
 
-        Optional<Comment> existingComment = commentService.findById(testingComment.getId());
+        Optional<CommentDto> existingComment = commentService.findById(testingComment.getId());
         assertThat(existingComment).isPresent();
 
         // testing
         commentService.deleteById(testingComment.getId());
 
         // verification
-        Optional<Comment> deletedComment = commentService.findById(testingComment.getId());
+        Optional<CommentDto> deletedComment = commentService.findById(testingComment.getId());
         assertThat(deletedComment).isNotPresent();
     }
 }

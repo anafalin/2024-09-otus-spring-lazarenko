@@ -1,10 +1,10 @@
 package ru.otus.hw.repositories;
 
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Book;
 
 import java.util.List;
@@ -20,23 +20,22 @@ public class JpaBookRepository implements BookRepository {
     private final EntityManager em;
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Book> findById(long id) {
+        EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre");
         return Optional.ofNullable(em.find(Book.class,
                 id,
-                Map.of("javax.persistence.fetchgraph", getGraph("authors-entity-book-graph"))));
+                Map.of("javax.persistence.fetchgraph", entityGraph)));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findAll() {
-        return em.createQuery("SELECT b FROM Book b", Book.class)
-                .setHint("javax.persistence.fetchgraph", getGraph("authors-entity-book-graph"))
+        EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre");
+        return em.createQuery("SELECT b FROM Book b JOIN FETCH b.genres", Book.class)
+                .setHint("javax.persistence.fetchgraph", entityGraph)
                 .getResultList();
     }
 
     @Override
-    @Transactional
     public Book save(Book book) {
         if (Objects.isNull(book.getId())) {
             em.persist(book);
@@ -46,12 +45,7 @@ public class JpaBookRepository implements BookRepository {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
         findById(id).ifPresent(em::remove);
-    }
-
-    private Object getGraph(String name) {
-        return em.getEntityGraph(name);
     }
 }

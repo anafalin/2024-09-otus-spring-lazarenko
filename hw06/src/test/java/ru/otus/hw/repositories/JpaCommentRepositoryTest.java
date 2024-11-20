@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.testObjects.GeneratorData;
@@ -80,6 +81,7 @@ class JpaCommentRepositoryTest {
 
 
     @DisplayName("должен сохранять новый комментарий")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     void save_saveNewComment_requestIsCorrect() {
         var expectedComment = new Comment(null, "Comment to book_1", LocalDate.now(), dbBooks.get(0));
@@ -97,6 +99,7 @@ class JpaCommentRepositoryTest {
     }
 
     @DisplayName("должен сохранять измененный комментарий")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Test
     void save_saveUpdatedComment_commentExists() {
         var book = dbBooks.get(0);
@@ -115,6 +118,7 @@ class JpaCommentRepositoryTest {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void deleteById() {
         var expectedComment = dbCommentsByBookId.get(1L).get(0);
         var actualComment = em.find(Comment.class, expectedComment.getId());

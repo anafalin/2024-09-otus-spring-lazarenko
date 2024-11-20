@@ -3,7 +3,9 @@ package ru.otus.hw.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.mapper.CommentMapper;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
@@ -19,21 +21,25 @@ public class CommentServiceImpl implements CommentService {
 
     private final BookRepository bookRepository;
 
+    private final CommentMapper commentMapper;
+
     @Override
     @Transactional(readOnly = true)
-    public Optional<Comment> findById(long id) {
-        return commentRepository.findById(id);
+    public Optional<CommentDto> findById(long id) {
+        Optional<Comment> optionalComment = commentRepository.findById(id);
+        return optionalComment.map(commentMapper::toCommentDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> findByBookId(long bookId) {
-        return commentRepository.findAllByBookId(bookId);
+    public List<CommentDto> findByBookId(long bookId) {
+        List<Comment> comments = commentRepository.findAllByBookId(bookId);
+        return commentMapper.toCommentDtos(comments);
     }
 
     @Override
     @Transactional
-    public Comment insert(long bookId, String text) {
+    public CommentDto insert(long bookId, String text) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id='%s' not found".formatted(bookId)));
 
@@ -42,16 +48,17 @@ public class CommentServiceImpl implements CommentService {
                 .book(book)
                 .build();
 
-        return commentRepository.save(comment);
+        comment = commentRepository.save(comment);
+        return commentMapper.toCommentDto(comment);
     }
 
     @Override
     @Transactional
-    public Comment update(long id, String text) {
+    public CommentDto update(long id, String text) {
         var comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment with id='%s' not found".formatted(id)));
         comment.setText(text);
-        return commentRepository.save(comment);
+        return commentMapper.toCommentDto(commentRepository.save(comment));
     }
 
     @Override
