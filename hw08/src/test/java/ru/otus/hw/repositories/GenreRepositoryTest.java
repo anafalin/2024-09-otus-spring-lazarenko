@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.testObjects.GeneratorData;
 
@@ -27,9 +25,6 @@ class GenreRepositoryTest {
     private GenreRepository genreRepository;
 
     private List<Genre> dbGenres;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @BeforeEach
     void setUp() {

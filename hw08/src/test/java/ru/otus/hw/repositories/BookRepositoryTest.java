@@ -7,8 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -47,6 +45,7 @@ class BookRepositoryTest {
         assertThat(actualBook).isPresent()
                 .get()
                 .usingRecursiveComparison()
+                .usingOverriddenEquals()
                 .isEqualTo(expectedBook);
     }
 
