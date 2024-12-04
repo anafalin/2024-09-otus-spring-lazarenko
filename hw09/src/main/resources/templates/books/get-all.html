@@ -12,6 +12,7 @@
 
         <div class="container-lg mx-auto my-2">
             <h4>Список всех книг</h4>
+
             <nav aria-label="Pagination" th:if="${totalPages > 0}">
                 <th:block
                         th:insert="~{fragments/pagination :: pagable(${totalPages}, ${currentPage}, page, '/books/all')}"/>
