@@ -12,10 +12,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUpdateBookRequest {
+public class CreateBookRequest {
     private String title;
 
     private Long authorId;
 
-    private List<Long> genresIds = new ArrayList<>();
+    private List<Long> genreIds = new ArrayList<>();
 }

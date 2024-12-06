@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +17,5 @@ public class BookDto {
 
     private AuthorDto author;
 
-    private Set<GenreDto> genres;
+    private List<GenreDto> genres;
 }

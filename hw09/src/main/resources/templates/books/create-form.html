@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:insert="~{fragments/header :: head}"/>
 
@@ -33,12 +33,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="genresIds" class="form-label">Жанры</label>
-                        <select id="genresIds" name="genresIds" multiple class="form-select" th:field="*{genresIds}">
+                        <select id="genresIds" name="genresIds" multiple class="form-select" th:field="*{genreIds}">
                             <option th:each="genre : ${genres}"
                                     th:value="${genre.id}"
                                     th:text="${genre.name}">
                             </option>
                         </select>
+                        <span style="color: red"
+                              th:if="${!#strings.isEmpty(error)}"
+                              th:text="${error}">Name Error</span>
                     </div>
                 </div>
 

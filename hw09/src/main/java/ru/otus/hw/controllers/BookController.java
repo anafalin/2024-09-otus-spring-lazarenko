@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
-import ru.otus.hw.dto.CreateUpdateBookRequest;
+import ru.otus.hw.dto.CreateBookRequest;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.dto.UpdateBookRequest;
 import ru.otus.hw.exceptions.EntityNotFoundException;
@@ -61,24 +61,27 @@ public class BookController {
 
     @GetMapping("/create")
     public String getCreateBookPage(Model model) {
-        model.addAttribute("book", new CreateUpdateBookRequest());
+        model.addAttribute("book", new CreateBookRequest());
 
-        List<AuthorDto> authors = authorService.findAll();
-        model.addAttribute("authors", authors);
-
-        List<GenreDto> genres = genreService.findAll();
-        model.addAttribute("genres", genres);
+        addAuthorsAndGenresInModel(model);
 
         return "/books/create-form";
     }
 
     @PostMapping("/create")
-    public String createBook(@ModelAttribute CreateUpdateBookRequest request) {
+    public String createBook(@ModelAttribute CreateBookRequest request, Model model) {
+        if (request.getGenreIds().isEmpty()) {
+            model.addAttribute("book", request);
+
+            addAuthorsAndGenresInModel(model);
+            model.addAttribute("error", "Жанры не могут быть пустыми");
+            return "/books/create-form";
+        }
+
         bookService.save(request.getTitle(), request.getAuthorId(),
-                request.getGenresIds().stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+                request.getGenreIds().stream().filter(Objects::nonNull).collect(Collectors.toSet()));
         return "redirect:/";
     }
-
 
     @GetMapping("/find")
     public String getBookById(@RequestParam(name = "bookId") Long id, Model model) {
@@ -89,22 +92,19 @@ public class BookController {
     }
 
     @GetMapping("/edit/{id}")
-    public String updateBook(@PathVariable("id") long id, Model model) {
+    public String getUpdateBookPage(@PathVariable("id") long id, Model model) {
         BookDto book = bookService.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
 
         model.addAttribute("book", bookMapper.toUpdateBookRequest(book));
-        List<AuthorDto> authors = authorService.findAll();
-        model.addAttribute("authors", authors);
-        List<GenreDto> genres = genreService.findAll();
-        model.addAttribute("genres", genres);
+        addAuthorsAndGenresInModel(model);
         return "/books/edit-form";
     }
 
     @PostMapping("/edit")
-    public String getUpdateBookPage(@ModelAttribute("book") UpdateBookRequest request) {
+    public String updateBook(@ModelAttribute("book") UpdateBookRequest request) {
         bookService.update(request.getId(), request.getTitle(), request.getAuthorId(),
-                request.getGenresIds().stream().filter(Objects::nonNull).collect(Collectors.toSet()));
+                request.getGenreIds().stream().filter(Objects::nonNull).collect(Collectors.toSet()));
         return "redirect:/";
     }
 
@@ -112,5 +112,13 @@ public class BookController {
     public String deleteBook(@PathVariable("id") Long id) {
         bookService.deleteById(id);
         return "redirect:/";
+    }
+
+    private void addAuthorsAndGenresInModel(Model model) {
+        List<AuthorDto> authors = authorService.findAll();
+        model.addAttribute("authors", authors);
+
+        List<GenreDto> genres = genreService.findAll();
+        model.addAttribute("genres", genres);
     }
 }

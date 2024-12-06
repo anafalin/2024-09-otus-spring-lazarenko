@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:insert="~{fragments/header :: head}"/>
 
@@ -17,31 +17,33 @@
             <form id="edit-form" th:method="post" th:action="@{/books/edit}" th:object="${book}">
                 <div class="row my-2">
                     <label for="book-id">ID:</label>
-                    <input id="book-id" readonly="readonly" name="id" type="text" th:value="*{id}" disabled/>
+                    <input id="book-id" readonly="readonly" name="id" type="text" th:value="*{id}" th:field="*{id}"
+                           th:disabled disabled/>
                 </div>
 
                 <div class="row my-2">
                     <label for="book-title">Title:</label>
-                    <input id="book-title" name="title" type="text" th:value="*{title}" required class="form-control"/>
+                    <input id="book-title" name="title" type="text" th:value="*{title}" required class="form-control"
+                           th:field="*{title}"/>
                 </div>
 
                 <div class="row my-2">
                     <label for="book-author">Author:</label>
-                    <select id="book-author" name="authorId" required class="form-select">
+                    <select id="book-author" name="authorId" required class="form-select" th:field="*{authorId}">
                         <option th:each="author : ${authors}"
                                 th:value="${author.id}"
                                 th:text="${author.fullName}"
-                                th:selected="${author.id == authorId}"></option>
+                                th:selected="${author.id == book.authorId}"></option>
                     </select>
                 </div>
 
                 <div class="row my-2">
                     <label for="genre-select">Genres:</label>
-                    <select id="genre-select" name="genresIds" multiple class="form-select" th:field="*{genresIds}">
+                    <select id="genre-select" name="genresIds" multiple class="form-select" th:field="*{genreIds}">
                         <option th:each="genre : ${genres}"
                                 th:value="${genre.id}"
-                                th:text="${genre.name}">
-                        </option>
+                                th:text="${genre.name}"
+                                th:selected="${#lists.contains(book.genreIds, genre.id)}"></option>
                     </select>
                 </div>
 

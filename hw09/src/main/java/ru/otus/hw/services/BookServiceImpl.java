@@ -56,6 +56,8 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDto update(Long id, String title, Long authorId, Set<Long> genresIds) {
+        bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
         return save(id, title, authorId, genresIds);
     }
 
@@ -70,10 +72,6 @@ public class BookServiceImpl implements BookService {
     }
 
     private BookDto save(Long id, String title, long authorId, Set<Long> genresIds) {
-        if (isEmpty(genresIds)) {
-            throw new IllegalArgumentException("Genres ids must not be null");
-        }
-
         var author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new EntityNotFoundException("Author with id='%s' not found".formatted(authorId)));
 

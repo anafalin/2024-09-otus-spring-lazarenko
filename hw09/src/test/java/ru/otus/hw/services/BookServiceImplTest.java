@@ -143,25 +143,6 @@ public class BookServiceImplTest {
     }
 
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    @DisplayName("должен бросать исключение, когда при сохранении книги передаваемое множество id жанров пустое")
-    @Test
-    void save_whenGenreIdsSetIsEmpty_thenIllegalArgumentException() {
-        // input data
-        String title = "new book insert";
-        Long authorId = dbAuthors.get(0).getId();
-        Set<Long> emptyGenresIds = Set.of();
-
-        // testing
-        assertThrows(IllegalArgumentException.class,
-                () -> bookService.save(title, authorId, emptyGenresIds),
-                "Genres ids must not be null");
-
-        // verification
-        var allBooks = bookService.findAll(PageRequest.of(0, 10));
-        assertThat(allBooks).hasSize(dbBooks.size());
-    }
-
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен бросать исключение, когда при сохранении книги" +
             " передаваемое множество id жанров содержит не существующий id")
     @Test
@@ -223,26 +204,6 @@ public class BookServiceImplTest {
         assertThrows(EntityNotFoundException.class,
                 () -> bookService.update(updatableBook.getId(), title, authorId, genresIds),
                 "One or all genres with ids = '100L' not found");
-
-        // verification
-        var allBooks = bookService.findAll(PageRequest.of(0, 10));
-        assertThat(allBooks).hasSize(dbBooks.size());
-    }
-
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    @DisplayName("должен бросать исключение при обновлении, когда при обновлении книги передаваемое ids жанра пустой")
-    @Test
-    void update_whenGenreIdsSetIsEmpty_thenIllegalArgumentException() {
-        // input data
-        Book updatableBook = dbBooks.get(0);
-        String title = "new title book";
-        Long authorId = updatableBook.getAuthor().getId();
-        Set<Long> emptyGenreIds = Set.of();
-
-        // testing
-        assertThrows(IllegalArgumentException.class,
-                () -> bookService.update(updatableBook.getId(), title, authorId, emptyGenreIds),
-                "Genres ids must not be null");
 
         // verification
         var allBooks = bookService.findAll(PageRequest.of(0, 10));

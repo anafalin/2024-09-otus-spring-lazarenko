@@ -29,6 +29,9 @@
                 </label>
                 <button type="submit" class="btn btn-primary my-3">Найти</button>
             </form>
+            <span style="color: red"
+                  th:if="${!#strings.isEmpty(error)}"
+                  th:text="${error}">Name Error</span>
         </div>
     </div>
 

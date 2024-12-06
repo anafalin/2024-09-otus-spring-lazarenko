@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +18,5 @@ public class UpdateBookRequest {
 
     private Long authorId;
 
-    private Set<Long> genresIds = new HashSet<>();
+    private List<Long> genreIds;
 }

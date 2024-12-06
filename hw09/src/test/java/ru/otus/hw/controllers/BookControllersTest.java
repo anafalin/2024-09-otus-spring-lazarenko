@@ -20,7 +20,6 @@ import ru.otus.hw.services.GenreService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -63,7 +62,7 @@ class BookControllerTest {
     @Test
     void getAllBooks() throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
-                Set.of(new GenreDto(1L, "Genre_1")));
+                List.of(new GenreDto(1L, "Genre_1")));
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         when(bookService.findAll(pageRequest))
@@ -79,7 +78,7 @@ class BookControllerTest {
     @Test
     void updateBook() throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
-                Set.of(new GenreDto(1L, "Genre_1")));
+                List.of(new GenreDto(1L, "Genre_1")));
 
         when(bookService.findById(1L))
                 .thenReturn(Optional.of(bookDto));
@@ -89,7 +88,7 @@ class BookControllerTest {
                 .thenReturn(List.of(new GenreDto(1L, "Genre Name")));
         when(bookMapper.toUpdateBookRequest(any()))
                 .thenReturn(new UpdateBookRequest(bookDto.getId(), bookDto.getTitle(), bookDto.getAuthor().getId(),
-                        bookDto.getGenres().stream().map(GenreDto::getId).collect(Collectors.toSet())));
+                        bookDto.getGenres().stream().map(GenreDto::getId).collect(Collectors.toList())));
 
         mockMvc.perform(get("/books/edit/1"))
                 .andExpect(status().isOk())
@@ -146,7 +145,7 @@ class BookControllerTest {
     @Test
     void createBook() throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
-                Set.of(new GenreDto(1L, "Genre_1")));
+                List.of(new GenreDto(1L, "Genre_1")));
 
         when(bookService.save(anyString(), anyLong(), anySet()))
                 .thenReturn(bookDto);
@@ -159,5 +158,31 @@ class BookControllerTest {
                 .andExpect(redirectedUrl("/"));
 
         verify(bookService).save(eq("New Book"), eq(1L), anySet());
+    }
+
+    @DisplayName(" возвращать страницу с результатом поиска книги по id")
+    @Test
+    void getBookById() throws Exception {
+        BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
+                List.of(new GenreDto(1L, "Genre_1")));
+        when(bookService.findById(anyLong()))
+                .thenReturn(Optional.of(bookDto));
+
+        mockMvc.perform(get("/books/find?bookId=".concat(bookDto.getId().toString())))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("book"))
+                .andExpect(view().name("/books/get-book"));
+    }
+
+    @DisplayName(" возвращать страницу с ошибкой")
+    @Test
+    void getBookByNotExistId() throws Exception {
+        when(bookService.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/books/find?bookId=100"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("error"))
+                .andExpect(view().name("index"));
     }
 }
