@@ -28,6 +28,7 @@
         <reflections.version>0.10.2</reflections.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <mapstcuct.lombok.version>0.2.0</mapstcuct.lombok.version>
+        <datafaker.version>1.7.0</datafaker.version>
     </properties>
 
     <dependencies>
@@ -100,7 +101,7 @@
         <dependency>
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>
-            <version>1.7.0</version>
+            <version>${datafaker.version}</version>
         </dependency>
     </dependencies>
 
