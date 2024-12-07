@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library</title>
+</head>
+<body>
+
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container m-2">
+        <h5>Операции с книгами:</h5>
+        <div class="my-3">
+            <a href="/books/all">Все книги</a>
+        </div>
+
+        <div class="my-5">
+            <a href="/books/create">Добавить книгу</a>
+        </div>
+
+        <div class="my-5">
+            <form th:action="@{/books/find}" method="get">
+                <label for="bookId">Поиск книги по Id:
+                    <input type="text" class="form-control" id="bookId" th:name="bookId">
+                </label>
+                <button type="submit" class="btn btn-primary my-3">Найти</button>
+            </form>
+            <span style="color: red"
+                  th:if="${!#strings.isEmpty(error)}"
+                  th:text="${error}">Name Error</span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

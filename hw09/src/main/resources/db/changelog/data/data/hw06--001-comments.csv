@@ -1,0 +1,5 @@
+book_id;text;created_at
+1;comment 1 to book 1;2024-11-10
+1;comment 2 to book 1;2024-11-11
+2;comment 1 to book 2;2024-11-12
+3;comment 1 to book 3;2024-11-13
