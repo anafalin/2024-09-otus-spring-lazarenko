@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library. Поиск книги</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-sm mx-auto my-2">
+            <h3>Книга с id: <span th:text="${book.id}"></span></h3>
+
+            <h3>Название: <span th:text="${book.title}"></span></h3>
+
+            <h3>Автор</h3>
+            <p>Id: <span th:text="${book.author.id}"></span></p>
+            <p>Имя: <span th:text="${book.author.fullName}"></span></p>
+
+            <h3>Жанры</h3>
+            <ul>
+                <li th:each="genre : ${book.genres}" th:text="${genre.name}">genre name</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
