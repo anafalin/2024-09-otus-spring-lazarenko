@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library. Добавление книги</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-sm mx-auto my-2">
+            <h4>Создание новой книги</h4>
+
+            <form th:method="post"
+                  th:action="@{/books/create} ">
+
+                <div th:object="${book}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Название</label>
+                        <input type="text" class="form-control" id="title" th:field="*{title}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="authorId" class="form-label">Автор</label>
+                        <select id="authorId" name="authorId" required class="form-select">
+                            <option th:each="author : ${authors}"
+                                    th:value="${author.id}"
+                                    th:text="${author.fullName}"
+                                    th:field="*{authorId}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="genresIds" class="form-label">Жанры</label>
+                        <select id="genresIds" name="genresIds" multiple class="form-select" th:field="*{genreIds}">
+                            <option th:each="genre : ${genres}"
+                                    th:value="${genre.id}"
+                                    th:text="${genre.name}">
+                            </option>
+                        </select>
+                        <span style="color: red"
+                              th:if="${!#strings.isEmpty(error)}"
+                              th:text="${error}">Name Error</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary my-3">Создать</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
