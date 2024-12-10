@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library. Редактирование книги</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-sm mx-auto my-2">
+            <h4>Редактирование книги</h4>
+
+            <form id="edit-form" th:method="post" th:action="@{/books/edit}" th:object="${book}">
+                <div class="row my-2">
+                    <label for="book-id">ID:</label>
+                    <input id="book-id" readonly="readonly" name="id" type="text" th:value="*{id}" th:field="*{id}"
+                           th:disabled disabled/>
+                </div>
+
+                <div class="row my-2">
+                    <label for="book-title">Title:</label>
+                    <input id="book-title" name="title" type="text" th:value="*{title}" required class="form-control"
+                           th:field="*{title}"/>
+                </div>
+
+                <div class="row my-2">
+                    <label for="book-author">Author:</label>
+                    <select id="book-author" name="authorId" required class="form-select" th:field="*{authorId}">
+                        <option th:each="author : ${authors}"
+                                th:value="${author.id}"
+                                th:text="${author.fullName}"
+                                th:selected="${author.id == book.authorId}"></option>
+                    </select>
+                </div>
+
+                <div class="row my-2">
+                    <label for="genre-select">Genres:</label>
+                    <select id="genre-select" name="genresIds" multiple class="form-select" th:field="*{genreIds}">
+                        <option th:each="genre : ${genres}"
+                                th:value="${genre.id}"
+                                th:text="${genre.name}"
+                                th:selected="${#lists.contains(book.genreIds, genre.id)}"></option>
+                    </select>
+                </div>
+
+                <div class="coll-2 m-2 p-2 d-flex justify-content-between">
+                    <div>
+                        <a th:href="@{/}">
+                            <button type="button" class="btn btn-secondary">Отмена</button>
+                        </a>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

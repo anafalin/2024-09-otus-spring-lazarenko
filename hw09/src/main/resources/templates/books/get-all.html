@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+    <title>Library. Все книги</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-lg mx-auto my-2">
+            <h4>Список всех книг</h4>
+
+            <nav aria-label="Pagination" th:if="${totalPages > 0}">
+                <th:block
+                        th:insert="~{fragments/pagination :: pagable(${totalPages}, ${currentPage}, page, '/books/all')}"/>
+            </nav>
+
+            <table class="table table-striped table-hover">
+                <tr class="table-success">
+                    <th class="col">Id</th>
+                    <th class="col">Название</th>
+                    <th class="col">Автор</th>
+                    <th class="col">Жанр</th>
+                    <th class="col">Действия</th>
+
+                </tr>
+
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.id}">Id</td>
+                    <td th:text="${book.title}">Title</td>
+                    <td th:text="${book.author.fullName}">Author</td>
+                    <td>
+                        <ul>
+                            <li th:each="genre : ${book.genres}" th:text="${genre.name}">genre name</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <div class="my-2">
+                            <a th:href="@{/books/edit/{id}(id=${book.id})}">
+                                <button class="btn btn-info" type="button">Редактировать</button>
+                            </a>
+                        </div>
+                        <div class="my-2">
+                            <form th:method="post" th:action="@{/books/delete/{id}(id=${book.id})}">
+                                <button class="btn btn-danger" type="submit">Удалить</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
