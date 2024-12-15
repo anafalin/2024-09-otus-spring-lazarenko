@@ -16,6 +16,12 @@
         <button @click="updateComment" class="btn btn-success mx-2">Обновить</button>
         <button @click="deleteComment" class="btn btn-danger mx-2">Удалить</button>
       </div>
+
+      <div class="my-3">
+        <div class="alert alert-danger" role="alert" v-if="messageError">
+          {{ messageError }}
+        </div>
+      </div>
     </div>
 
     <div v-else>
@@ -73,7 +79,13 @@ export default {
     },
 
     updateComment() {
-      console.log(this.comment);
+      this.messageError = '';
+
+      if (!this.comment.text) {
+        this.messageError = 'Текст комментария не должен быть пустым';
+        return;
+      }
+
       CommentDataService.updateById(this.comment.id, this.comment)
           .then(() => {
             this.messageUpdate = 'Комментарий был успешно обновлен'

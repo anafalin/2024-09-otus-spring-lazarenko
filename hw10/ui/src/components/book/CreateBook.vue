@@ -39,7 +39,7 @@
         {{ messageError }}
       </div>
 
-      <button @click="newBook" class="btn btn-primary">Добавить новую книгу</button>
+      <router-link to="/books" class="btn btn-primary">Все книги</router-link>
     </div>
   </div>
 </template>
@@ -68,19 +68,18 @@ export default {
   },
   methods: {
     saveBook() {
-      this.messageError = ''; // Сброс сообщения об ошибке перед проверкой
+      this.messageError = '';
 
-      // Проверка на незаполненность полей
       if (!this.book.title) {
-        this.messageError = 'Название обязательно для заполнения.';
+        this.messageError = 'Название обязательно для заполнения';
         return;
       }
       if (!this.book.authorId) {
-        this.messageError = 'Автор обязателен для выбора.';
+        this.messageError = 'Автор обязателен для выбора';
         return;
       }
       if (this.book.genreIds.length === 0) {
-        this.messageError = 'Необходимо выбрать хотя бы один жанр.';
+        this.messageError = 'Необходимо выбрать хотя бы один жанр';
         return;
       }
 

@@ -15,6 +15,12 @@
       <div class="mb-3">
         <button @click="saveComment" class="btn btn-success mx-2">Сохранить</button>
       </div>
+
+      <div class="my-3">
+        <div class="alert alert-danger" role="alert" v-if="messageError">
+          {{ messageError }}
+        </div>
+      </div>
     </div>
 
     <div v-else>
@@ -49,11 +55,18 @@ export default {
   },
   methods: {
     saveComment() {
+      this.messageError = '';
+
+      if (!this.comment.text) {
+        this.messageError = 'Текст комментария не должен быть пустым';
+        return;
+      }
+
       var data = {
         text: this.comment.text,
         bookId: this.comment.bookId,
       }
-      console.log(data)
+
       CommentDataService.create(data)
           .then(response => {
             this.comment.id = response.data.id

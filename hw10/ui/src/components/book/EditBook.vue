@@ -26,6 +26,12 @@
         <button @click="updateBook" class="btn btn-success mx-2">Обновить</button>
         <button @click="deleteBook" class="btn btn-danger mx-2">Удалить</button>
       </div>
+
+      <div class="my-3">
+        <div class="alert alert-danger" role="alert" v-if="messageError">
+          {{ messageError }}
+        </div>
+      </div>
     </div>
 
     <div v-else>
@@ -41,7 +47,7 @@
         {{ messageError}}
       </div>
 
-      <button @click="newBook" class="btn btn-primary">Добавить новую книгу</button>
+      <router-link to="/books" class="btn btn-primary">Все книги</router-link>
     </div>
   </div>
 </template>
@@ -85,7 +91,21 @@ export default {
     },
 
     updateBook() {
-      console.log(this.book)
+      this.messageError = '';
+
+      if (!this.book.title) {
+        this.messageError = 'Название обязательно для заполнения';
+        return;
+      }
+      if (!this.book.authorId) {
+        this.messageError = 'Автор обязателен для выбора';
+        return;
+      }
+      if (this.book.genreIds.length === 0) {
+        this.messageError = 'Необходимо выбрать хотя бы один жанр';
+        return;
+      }
+
       BookDataService.updateById(this.book.id, this.book)
           .then(() => {
             this.messageUpdate = 'Книга была успешно обновлена'
