@@ -1,0 +1,17 @@
+<template>
+  <h2 class="my-2" style="text-align: center; color: #010187; font-weight: bold">
+    День, в котором было познано что-то новое, считается днем, прожитым не зря!
+  </h2>
+
+  <div class="container my-2 col-12 rounded d-flex align-items-center">
+    <img class="img-thumbnail rounded me-3" :src="require('@/assets/main.jpg')" alt="Books' cat"
+         style="max-width: 240px"/>
+    <div>
+      <div class="container my-2">Знакомьтесь с книжными новинками. Читайте отзывы на книги. Делитесь своим
+        мнением.
+      </div>
+      <div class="container my-2">Воспользуйтесь рекомендациями. Найдите единомышленников.</div>
+      <div class="container my-2">Организуйте библиотеку прочитанного и желаемого к прочтению.</div>
+    </div>
+  </div>
+</template>
