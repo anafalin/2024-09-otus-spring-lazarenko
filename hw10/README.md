@@ -20,3 +20,13 @@ __Краткое описание__: Spring MVC приложение с испо
 4. Протестировать все эндпойнты REST-контроллеров с моками зависимостей.
 
 В случае разработки SPA - рекомендуется вынести репозиторий с front-end. Используйте proxy при разработке (настройки CORS не должно быть).
+____
+
+## Технологии
+### Backend
+- Spring Boot
+- [__Backend of application__](backend/Readme.md#rest-api-for-library-application)
+
+### Frontend
+- Vue.js
+- [__UI library api__](ui/Readme.md#ui-for-library-rest-api)
