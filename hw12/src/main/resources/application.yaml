@@ -1,7 +1,8 @@
 spring:
 
   liquibase:
-    enabled: false
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
 
   datasource:
     url: jdbc:postgresql://localhost:5432/library
