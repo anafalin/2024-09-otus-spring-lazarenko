@@ -29,6 +29,9 @@ public class ModelTransformer {
                 .id(String.valueOf(book.getId()))
                 .title(book.getTitle())
                 .author(MongoAuthor.builder().id(String.valueOf(book.getAuthor().getId())).build())
+                .genres(book.getGenres().stream().map(jpaGenre ->
+                        MongoGenre.builder().id(String.valueOf(jpaGenre.getId())).build())
+                        .toList())
                 .build();
     }
 
@@ -37,6 +40,7 @@ public class ModelTransformer {
                 .id(String.valueOf(comment.getId()))
                 .text(comment.getText())
                 .createdAt(comment.getCreatedAt())
+                .book(MongoBook.builder().id(String.valueOf(comment.getBook().getId())).build())
                 .build();
     }
 }

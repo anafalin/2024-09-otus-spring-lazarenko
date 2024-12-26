@@ -10,8 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -28,8 +26,6 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"author", "genres"})
 @ToString(exclude = {"author", "genres"})
-@NamedEntityGraph(name = "book-author-genre",
-        attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("genres")})
 @Entity
 @Table(name = "books")
 public class JpaBook {

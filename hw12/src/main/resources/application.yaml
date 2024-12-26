@@ -19,6 +19,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    show-sql: false
 
   h2:
     console:

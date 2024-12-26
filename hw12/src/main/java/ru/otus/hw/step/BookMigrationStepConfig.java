@@ -33,12 +33,12 @@ public class BookMigrationStepConfig {
     @Bean
     @StepScope
     public JpaCursorItemReader<JpaBook> bookJpaReader(EntityManagerFactory entityManagerFactory) {
+
         JpaCursorItemReader<JpaBook> reader = new JpaCursorItemReader<>();
 
         reader.setEntityManagerFactory(entityManagerFactory);
         reader.setName("bookJpaItemReader");
-        reader.setQueryString("SELECT b FROM JpaBook b");
-
+        reader.setQueryString("SELECT b FROM JpaBook b LEFT JOIN FETCH b.genres");
         return reader;
     }
 
