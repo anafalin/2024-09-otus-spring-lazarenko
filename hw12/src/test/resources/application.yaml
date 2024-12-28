@@ -1,0 +1,35 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog.xml
+
+  datasource:
+    url: jdbc:h2:mem:test_librarydb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  data:
+    mongodb:
+      host: localhost
+      port: 0 # when flapdoodle using
+      database: test_backup_library_db
+
+  shell:
+    interactive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2

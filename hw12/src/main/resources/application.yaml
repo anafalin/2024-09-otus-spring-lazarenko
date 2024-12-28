@@ -1,0 +1,39 @@
+spring:
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/library
+    username: postgres
+    password: rootroot
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: backup_library_db
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
