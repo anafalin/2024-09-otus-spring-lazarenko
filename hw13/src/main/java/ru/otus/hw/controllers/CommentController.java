@@ -28,9 +28,31 @@ public class CommentController {
     @GetMapping("/{bookId}")
     public String getAllCommentsByBook(@PathVariable("bookId") Long bookId, Model model) {
         List<CommentDto> comments = commentService.findByBookId(bookId);
-        model.addAttribute("bookTitle", bookRepository.findById(bookId).get().getTitle());
+        model.addAttribute("bookTitle", getBookTitle(bookId));
         model.addAttribute("comments", comments);
         return "/comments/get-all";
+    }
+
+    @GetMapping("/create/{bookId}")
+    public String getCreateCommentPage(@PathVariable("bookId") Long bookId, Model model) {
+        CommentCreateUpdateRequest comment = new CommentCreateUpdateRequest();
+        comment.setBookId(bookId);
+        model.addAttribute("comment", comment);
+        model.addAttribute("bookTitle", getBookTitle(bookId));
+        return "/comments/create-form";
+    }
+
+    private String getBookTitle(Long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id '%s' not found".formatted(bookId)))
+                .getTitle();
+    }
+
+    @PostMapping("/create")
+    public String createComment(@ModelAttribute(name = "comment") CommentCreateUpdateRequest request, Model model) {
+
+        commentService.insert(request.getBookId(), request.getText());
+        return "redirect:/comments/" + request.getBookId();
     }
 
     @GetMapping("/edit/{id}")
@@ -43,7 +65,8 @@ public class CommentController {
     }
 
     @PostMapping("/edit/{id}")
-    public String updateComment(@PathVariable("id") Long id, @ModelAttribute("comment") CommentCreateUpdateRequest request) {
+    public String updateComment(@PathVariable("id") Long id,
+                                @ModelAttribute("comment") CommentCreateUpdateRequest request) {
         commentService.update(id, request.getText());
         return "redirect:/comments/" + request.getBookId();
     }

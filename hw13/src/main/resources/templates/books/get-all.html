@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:insert="~{fragments/header :: head}"/>
-    <title>Library. Все книги</title>
+    <title>Library: Все книги</title>
 </head>
 <body>
 <div class="container">
@@ -40,22 +40,14 @@
                         </ul>
                     </td>
                     <td>
-                        <div class="my-2">
-                            <a th:href="@{/books/edit/{id}(id=${book.id})}">
-                                <button class="btn btn-info" type="button">Редактировать</button>
-                            </a>
-                        </div>
-                        <div class="my-2">
-                            <form th:method="get" th:action="@{/comments/{bookId}(bookId=${book.id})}">
-                                <button class="btn btn-warning" type="submit">Комментарии</button>
-                            </form>
-                        </div>
+                        <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-info mx-2">Редактировать</a>
+                        <a th:href="@{/comments/{bookId}(bookId=${book.id})}" class="btn btn-warning mx-2">Комментарии</a>
+                        <a th:href="@{/comments/create/{bookId}(bookId=${book.id})}" class="btn btn-success mx-2">Добавить комментарий</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-
     </div>
 </div>
 </body>

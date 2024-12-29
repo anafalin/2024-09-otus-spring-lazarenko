@@ -44,7 +44,7 @@ public class UserApp {
     @Column(name = "is_locked", nullable = false)
     private Boolean isAccountLocked = false;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH },
             fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -52,20 +52,11 @@ public class UserApp {
     )
     private List<Role> roles = new ArrayList<>();
 
-    public void addRole(Role role){
+    public void addRole(Role role) {
         roles.add(role);
     }
 
-    public void removeRole(Role role){
+    public void removeRole(Role role) {
         roles.remove(role);
-    }
-
-    @Override
-    public String toString() {
-        return "UserApp{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
     }
 }

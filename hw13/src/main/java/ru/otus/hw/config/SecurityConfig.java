@@ -28,15 +28,17 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .failureUrl("/login/error")
+                        .failureUrl("/fail")
                         .successForwardUrl("/home")
                         .defaultSuccessUrl("/home")
+                        .failureHandler((request, response, exception) -> response.sendRedirect("/login?error=true"))
                 )
                 .logout(form -> form
                         .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
                 )
                 .rememberMe(rm -> rm.key("AnyKey")
-                        .tokenValiditySeconds(600));
+                        .tokenValiditySeconds(5));
         return http.build();
     }
 
@@ -44,5 +46,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
-
 }

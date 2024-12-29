@@ -2,11 +2,10 @@ package ru.otus.hw.controllers;
 
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.security.SecurityUser;
 
 @Controller
@@ -18,7 +17,10 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String getPageLogin() {
+    public String getPageLogin(Model model, @RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("messageError", "Неверные учетные данные пользователя");
+        }
         return "login";
     }
 
@@ -28,13 +30,6 @@ public class MainController {
         SecurityUser user = (SecurityUser) securityContext.getAuthentication().getPrincipal();
         model.addAttribute("username", user.getUsername());
         return "index";
-    }
-
-    @GetMapping("/login/error")
-    public String getPageErrorLogin(Model model) {
-        model.addAttribute(
-                "messageError", "Пользователь не найден или неверно введены данные для входа");
-        return "/login";
     }
 
     @GetMapping("/logout")

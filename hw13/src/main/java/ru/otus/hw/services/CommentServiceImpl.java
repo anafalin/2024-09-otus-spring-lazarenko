@@ -10,6 +10,7 @@ import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = Comment.builder()
                 .text(text)
                 .book(book)
+                .createdAt(LocalDate.now())
                 .build();
 
         comment = commentRepository.save(comment);

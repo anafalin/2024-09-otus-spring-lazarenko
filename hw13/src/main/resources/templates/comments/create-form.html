@@ -3,7 +3,7 @@
 <head>
     <th:block th:insert="~{fragments/header :: head}"/>
 
-    <title>Library. Редактирование книги</title>
+    <title>Library: Создание комментария</title>
 </head>
 <body>
 <div class="container">
@@ -16,10 +16,12 @@
                 <span th:text="${bookTitle}"></span>
             </h2>
 
-            <form id="edit-form" th:method="post" th:action="@{/comments/create/}" th:object="${comment}">
+            <form id="edit-form" th:method="post" th:action="@{/comments/create}" th:object="${comment}">
+                <input type="hidden" th:field="*{bookId}" th:value="*{bookId}"/>
+
                 <div class="row my-2">
                     <label for="book-title">Комментарий:</label>
-                    <textarea class="form-control" id="book-title" name="title" th:value="*{comment.text}"
+                    <textarea class="form-control" id="book-title" name="title" th:value="*{text}"
                                                               required th:field="*{text}">
                     </textarea>
                 </div>

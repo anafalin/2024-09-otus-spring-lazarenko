@@ -3,7 +3,7 @@
 <head>
     <th:block th:insert="~{fragments/header :: head}"/>
 
-    <title>Вход</title>
+    <title>Library: Вход</title>
 </head>
 <body>
 
@@ -15,14 +15,6 @@
         <div class="alert alert-danger" role="alert"
              th:if="${!#strings.isEmpty(messageError)}"
              th:text="${messageError}"></div>
-
-        <div class="alert alert-info" role="alert"
-             th:if="${!#strings.isEmpty(messageAboutConfirmEmail)}"
-             th:text="${messageAboutConfirmEmail}"></div>
-
-        <div th:if="${!#strings.isEmpty(messageType)}"
-             th:class="${#strings.prepend(messageType, 'my-3 alert alert-')}"
-             role="alert" th:text="${message}"></div>
 
         <div class="container col-4">
             <h3>Авторизация</h3>
@@ -37,6 +29,12 @@
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password"
                            required>
                 </p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember-me" id="flexCheckDefault" checked>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Запомнить меня на этом компьютере
+                    </label>
+                </div>
 
                 <button class="btn btn-primary btn-block" type="submit">Войти</button>
             </form>

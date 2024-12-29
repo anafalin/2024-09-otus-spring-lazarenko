@@ -19,15 +19,20 @@
                     <li class="nav-item">
                         <a href="/books/create" class="nav-link">Создать книгу</a>
                     </li>
+                    <li>
+                        <form th:action="@{/books/find}" method="get" class="d-flex ml-3" role="search">
+                            <input th:name="bookId" class="form-control me-2" type="search"
+                                   placeholder="Поиск книги по Id:" aria-label="Поиск книги по Id:">
+                            <button class="btn btn-outline-success" type="submit">Поиск</button>
+                        </form>
+                    </li>
                 </ul>
-                <form th:action="@{/books/find}" method="get" class="d-flex" role="search">
-                    <input th:name="bookId" class="form-control me-2" type="search"
-                           placeholder="Поиск книги по Id:" aria-label="Поиск книги по Id:">
-                    <button class="btn btn-outline-success" type="submit">Поиск</button>
-                </form>
+
             </div>
 
-            <div sec:authorize="!hasRole('ROLE_ANONYMOUS')" sec:authentication="name" class="text-light mx-2"></div>
+            <div sec:authorize="!hasRole('ROLE_ANONYMOUS')" sec:authentication="name"
+                 class="text-light mx-2" style="align-content: center">Name
+            </div>
             <div>
                 <a sec:authorize="!isAuthenticated()" class="btn btn-success mx-2" th:href="@{login}">Вход</a>
                 <a sec:authorize="isAuthenticated()" class="btn btn-outline-light mx-2" th:href="@{logout}">Выход</a>

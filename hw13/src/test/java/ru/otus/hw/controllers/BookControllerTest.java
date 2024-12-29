@@ -2,7 +2,9 @@ package ru.otus.hw.controllers;
 
 import net.datafaker.Faker;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -10,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.config.SecurityConfig;
 import ru.otus.hw.dto.AuthorDto;
@@ -25,6 +26,7 @@ import ru.otus.hw.services.GenreService;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -64,13 +66,17 @@ class BookControllerTest {
 
     private Faker faker = new Faker();
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"}
-    )
+    static Stream<Arguments> userAuthProvider() {
+        return Stream.of(
+                Arguments.of("admin", "ROLE_ADMIN"),
+                Arguments.of("user", "ROLE_USER")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать страницу со всеми книгами")
-    @Test
-    void getAllBooks() throws Exception {
+    void getAllBooks(String username, String role) throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
                 List.of(new GenreDto(1L, "Genre_1")));
         PageRequest pageRequest = PageRequest.of(0, 10);
@@ -78,19 +84,17 @@ class BookControllerTest {
         when(bookService.findAll(pageRequest))
                 .thenReturn(new PageImpl<>(List.of(bookDto)));
 
-        mockMvc.perform(get("/books/all"))
+        mockMvc.perform(get("/books/all")
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("books"))
                 .andExpect(view().name("/books/get-all"));
     }
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"}
-    )
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать страницу для редактирования книги")
-    @Test
-    void updateBook() throws Exception {
+    void updateBook(String username, String role) throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
                 List.of(new GenreDto(1L, "Genre_1")));
 
@@ -104,7 +108,8 @@ class BookControllerTest {
                 .thenReturn(new UpdateBookRequest(bookDto.getId(), bookDto.getTitle(), bookDto.getAuthor().getId(),
                         bookDto.getGenres().stream().map(GenreDto::getId).collect(Collectors.toList())));
 
-        mockMvc.perform(get("/books/edit/1"))
+        mockMvc.perform(get("/books/edit/1")
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/books/edit-form"))
                 .andExpect(model().attributeExists("book"))
@@ -112,65 +117,59 @@ class BookControllerTest {
                 .andExpect(model().attributeExists("genres"));
     }
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"},
-            password = "admin"
-    )
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать стартовую страницу при отправлении запроса на обновление книги ")
-    @Test
-    void getUpdateBookPage() throws Exception {
+    void getUpdateBookPage(String username, String role) throws Exception {
         when(bookService.update(anyLong(), anyString(), anyLong(), anySet())).thenReturn(null);
         mockMvc.perform(post("/books/edit")
                         .param("id", "1")
                         .param("title", "Updated Title")
                         .param("authorId", "1")
-                        .param("genreIds", "1", "2"))
+                        .param("genreIds", "1", "2")
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
         verify(bookService).update(eq(1L), eq("Updated Title"), eq(1L), anySet());
     }
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"}
-    )
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать стартовую страницу при отправлении запроса на удаление книги")
-    @Test
-    void deleteBook() throws Exception {
+    void deleteBook(String username, String role) throws Exception {
         doNothing()
                 .when(bookService).deleteById(1L);
 
-        mockMvc.perform(post("/books/delete/1"))
+        mockMvc.perform(post("/books/delete/1")
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
         verify(bookService).deleteById(1L);
     }
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"}
-    )
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать страницу для создания книги")
-    @Test
-    void getCreateBookPage() throws Exception {
+    void getCreateBookPage(String username, String role) throws Exception {
         when(authorService.findAll())
                 .thenReturn(List.of(new AuthorDto(1L, "Author Name")));
         when(genreService.findAll())
                 .thenReturn(List.of(new GenreDto(1L, "Genre Name")));
 
-        mockMvc.perform(get("/books/create"))
+        mockMvc.perform(get("/books/create")
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/books/create-form"))
                 .andExpect(model().attributeExists("authors"))
                 .andExpect(model().attributeExists("genres"));
     }
 
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать стартовую страницу при отправлении запроса на создание книги")
-    @Test
-    void createBook() throws Exception {
+    void createBook(String username, String role) throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
                 List.of(new GenreDto(1L, "Genre_1")));
 
@@ -178,7 +177,7 @@ class BookControllerTest {
                 .thenReturn(bookDto);
 
         mockMvc.perform(post("/books/create")
-                        .with(user("admin").authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role)))
                         .param("title", "New Book")
                         .param("authorId", "1")
                         .param("genreIds", "1", "2"))
@@ -188,35 +187,31 @@ class BookControllerTest {
         verify(bookService).save(eq("New Book"), eq(1L), anySet());
     }
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"}
-    )
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать страницу с результатом поиска книги по id")
-    @Test
-    void getBookById() throws Exception {
+    void getBookById(String username, String role) throws Exception {
         BookDto bookDto = new BookDto(1L, faker.book().title(), new AuthorDto(1L, faker.name().fullName()),
                 List.of(new GenreDto(1L, "Genre_1")));
         when(bookService.findById(anyLong()))
                 .thenReturn(Optional.of(bookDto));
 
-        mockMvc.perform(get("/books/find?bookId=".concat(bookDto.getId().toString())))
+        mockMvc.perform(get("/books/find?bookId=".concat(bookDto.getId().toString()))
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("book"))
                 .andExpect(view().name("/books/get-book"));
     }
 
-    @WithMockUser(
-            username = "admin",
-            authorities = {"ROLE_ADMIN"}
-    )
+    @ParameterizedTest
+    @MethodSource("userAuthProvider")
     @DisplayName(" возвращать страницу с ошибкой")
-    @Test
-    void getBookByNotExistId() throws Exception {
+    void getBookByNotExistId(String username, String role) throws Exception {
         when(bookService.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/books/find?bookId=100"))
+        mockMvc.perform(get("/books/find?bookId=100")
+                        .with(user(username).authorities(new SimpleGrantedAuthority(role))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("error"))
                 .andExpect(view().name("index"));
