@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library: Поиск книги</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <h2>Информация по книги</h2>
+        <div class="container-sm mx-auto my-2">
+            <div class="border border-black p-3">
+                <div class="mb-3">
+                    <div class="fw-bold">Название</div>
+                    <div><span th:text="${book.id}">Название книги</span></div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="fw-bold">Автор</div>
+                    <div><span th:text="${book.author.fullName}">Имя автора</span></div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="fw-bold">Жанры</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="genre : ${book.genres}" th:text="${genre.name}">Имя жанра
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="m-2 d-flex justify-content-end">
+                <div class="m-2">
+                    <a th:href="@{/books/edit/{id}(id=${book.id})}">
+                        <button class="btn btn-info" type="button">Редактировать</button>
+                    </a>
+                </div>
+                <div class="m-2">
+                    <form th:method="post" th:action="@{/books/delete/{id}(id=${book.id})}">
+                        <button class="btn btn-danger" type="submit">Удалить</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

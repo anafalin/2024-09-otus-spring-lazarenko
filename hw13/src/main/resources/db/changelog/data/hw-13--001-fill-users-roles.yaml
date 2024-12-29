@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: hw13--001-roles
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: name
+            file: data/hw13--001-roles.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: roles
+
+  - changeSet:
+      id: hw13--002-users
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: username, password
+            file: data/hw13--002-users.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: users
+
+  - changeSet:
+      id: hw13--003-users-roles
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: user_id, role_id
+            file: data/hw13--003-users-roles.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: users_roles
