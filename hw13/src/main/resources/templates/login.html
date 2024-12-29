@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Вход</title>
+</head>
+<body>
+
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="alert alert-danger" role="alert"
+             th:if="${!#strings.isEmpty(messageError)}"
+             th:text="${messageError}"></div>
+
+        <div class="alert alert-info" role="alert"
+             th:if="${!#strings.isEmpty(messageAboutConfirmEmail)}"
+             th:text="${messageAboutConfirmEmail}"></div>
+
+        <div th:if="${!#strings.isEmpty(messageType)}"
+             th:class="${#strings.prepend(messageType, 'my-3 alert alert-')}"
+             role="alert" th:text="${message}"></div>
+
+        <div class="container col-4">
+            <h3>Авторизация</h3>
+            <form class="form-signin" method="post" action="/login">
+                <p>
+                    <label for="username" class="sr-only">Логин</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username"
+                           required autofocus>
+                </p>
+                <p>
+                    <label for="password" class="sr-only">Пароль</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                           required>
+                </p>
+
+                <button class="btn btn-primary btn-block" type="submit">Войти</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

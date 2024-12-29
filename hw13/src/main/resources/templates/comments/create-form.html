@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library. Редактирование книги</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-sm mx-auto my-2">
+            <h2>Создание комментария к книге
+                <span th:text="${bookTitle}"></span>
+            </h2>
+
+            <form id="edit-form" th:method="post" th:action="@{/comments/create/}" th:object="${comment}">
+                <div class="row my-2">
+                    <label for="book-title">Комментарий:</label>
+                    <textarea class="form-control" id="book-title" name="title" th:value="*{comment.text}"
+                                                              required th:field="*{text}">
+                    </textarea>
+                </div>
+
+                <div class="coll-2 m-2 p-2 d-flex justify-content-between">
+                    <div>
+                        <a th:href="@{/}">
+                            <button type="button" class="btn btn-secondary">Отмена</button>
+                        </a>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

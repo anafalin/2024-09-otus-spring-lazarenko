@@ -1,0 +1,59 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-table-roles" author="Lazarenko Anastasia">
+        <createTable tableName="roles" remarks="Create table roles">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-users" author="Lazarenko Anastasia">
+        <createTable tableName="users" remarks="Create table users">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_locked" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-users-roles" author="Lazarenko Anastasia">
+        <createTable tableName="users_roles" remarks="Create table user_roles">
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_users_roles__user_id"
+                             referencedTableName="users"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                             nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints foreignKeyName="fk_users_roles__role_id"
+                             referencedTableName="roles"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                             nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="users_roles" columnNames="user_id, role_id"/>
+    </changeSet>
+
+</databaseChangeLog>
