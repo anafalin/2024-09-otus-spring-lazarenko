@@ -1,0 +1,44 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="nav">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Library</a>
+
+            <button sec:authorize="isAuthenticated()"
+                    class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div sec:authorize="isAuthenticated()"
+                 class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="/books/all" class="nav-link">Книги</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/books/create" class="nav-link">Создать книгу</a>
+                    </li>
+                    <li>
+                        <form th:action="@{/books/find}" method="get" class="d-flex ml-3" role="search">
+                            <input th:name="bookId" class="form-control me-2" type="search"
+                                   placeholder="Поиск книги по Id:" aria-label="Поиск книги по Id:">
+                            <button class="btn btn-outline-success" type="submit">Поиск</button>
+                        </form>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div sec:authorize="!hasRole('ROLE_ANONYMOUS')" sec:authentication="name"
+                 class="text-light mx-2" style="align-content: center">Name
+            </div>
+            <div>
+                <a sec:authorize="!isAuthenticated()" class="btn btn-success mx-2" th:href="@{login}">Вход</a>
+                <a sec:authorize="isAuthenticated()" class="btn btn-outline-light mx-2" th:href="@{logout}">Выход</a>
+            </div>
+        </div>
+    </nav>
+</div>
