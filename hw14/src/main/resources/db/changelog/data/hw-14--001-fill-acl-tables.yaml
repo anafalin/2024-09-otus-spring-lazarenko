@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: hw14--001-acl-sid
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: principal, sid
+            file: data/hw14--001-acl-sid.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: acl_sid
+
+  - changeSet:
+      id: hw14--002-acl-class
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: class
+            file: data/hw14--002-acl-class.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: acl_class
+
+  - changeSet:
+        id: hw14--003-acl-object-identity
+        author: Lazarenko Anastasia
+        context: data
+        changes:
+            - loadUpdateData:
+                  relativeToChangelogFile: true
+                  primaryKey: object_id_class, object_id_identity, parent_object, owner_sid, entries_inheriting
+                  file: data/hw14--003-acl-object-identity.csv
+                  separator: ;
+                  encoding: UTF-8
+                  tableName: acl_object_identity
+
+  - changeSet:
+      id: hw14--004-acl_entry
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: acl_object_identity, ace_order, sid, mask, granting, audit_success, audit_failure
+            file: data/hw14--004-acl-entry.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: acl_entry

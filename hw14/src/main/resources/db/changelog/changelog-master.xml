@@ -13,4 +13,7 @@
     <include file="schema/hw13--create-table-users-roles.xml" relativeToChangelogFile="true"/>
     <include file="data/hw-13--001-fill-users-roles.yaml" relativeToChangelogFile="true"/>
 
+    <include file="schema/hw14--create-acl-tables.xml" relativeToChangelogFile="true"/>
+    <include file="data/hw-14--001-fill-acl-tables.yaml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

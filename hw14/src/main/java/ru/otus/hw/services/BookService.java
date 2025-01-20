@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.otus.hw.dto.BookDto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,4 +18,6 @@ public interface BookService {
     BookDto update(Long id, String title, Long authorId, Set<Long> genresIds);
 
     void deleteById(Long id);
+
+    List<BookDto> findAllOwnersBook(Pageable paging);
 }

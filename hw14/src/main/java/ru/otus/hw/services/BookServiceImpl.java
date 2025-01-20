@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.BookDto;
@@ -15,6 +16,7 @@ import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -69,6 +71,14 @@ public class BookServiceImpl implements BookService {
 
         commentRepository.deleteAllByBookId(id);
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    @PostFilter("hasPermission(filterObject, 'WRITE')")
+    @Transactional(readOnly = true)
+    public List<BookDto> findAllOwnersBook(Pageable paging) {
+        Page<Book> booksPage = bookRepository.findAll(paging);
+        return bookMapper.toBookDtos(booksPage.getContent());
     }
 
     private BookDto save(Long id, String title, long authorId, Set<Long> genresIds) {

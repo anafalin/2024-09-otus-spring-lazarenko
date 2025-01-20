@@ -11,11 +11,11 @@
 <div class="container">
     <th:block th:insert="~{fragments/navigation :: nav}"/>
 
-    <div sec:authorize="isAuthenticated()">
+    <div sec:authorize="isAuthenticated()" class="container">
         <th:block th:insert="~{fragments/mainpage/isAuthenticated :: main}"/>
     </div>
 
-    <div sec:authorize="!isAuthenticated()">
+    <div sec:authorize="!isAuthenticated()" class="container">
         <th:block th:insert="~{fragments/mainpage/isNotAuthenticated :: main}"/>
     </div>
 </div>
