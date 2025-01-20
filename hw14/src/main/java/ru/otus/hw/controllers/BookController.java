@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +61,7 @@ public class BookController {
         return "/books/get-all";
     }
 
+    @PreAuthorize("hasRole('EDITOR')")
     @GetMapping("/create")
     public String getCreateBookPage(Model model) {
         model.addAttribute("book", new BookCreateRequest());
@@ -68,6 +71,7 @@ public class BookController {
         return "/books/create-form";
     }
 
+    @PreAuthorize("hasRole('EDITOR')")
     @PostMapping("/create")
     public String createBook(@ModelAttribute BookCreateRequest request, Model model) {
         if (request.getGenreIds().isEmpty()) {
@@ -91,6 +95,7 @@ public class BookController {
         return "/books/get-book";
     }
 
+    @PreAuthorize("hasRole('EDITOR')")
     @GetMapping("/edit/{id}")
     public String getUpdateBookPage(@PathVariable("id") long id, Model model) {
         BookDto book = bookService.findById(id)
@@ -101,6 +106,7 @@ public class BookController {
         return "/books/edit-form";
     }
 
+    @PreAuthorize("hasRole('EDITOR')")
     @PostMapping("/edit")
     public String updateBook(@ModelAttribute("book") UpdateBookRequest request) {
         bookService.update(request.getId(), request.getTitle(), request.getAuthorId(),
@@ -108,6 +114,7 @@ public class BookController {
         return "redirect:/";
     }
 
+    @PreAuthorize("hasRole('EDITOR')")
     @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable("id") Long id) {
         bookService.deleteById(id);

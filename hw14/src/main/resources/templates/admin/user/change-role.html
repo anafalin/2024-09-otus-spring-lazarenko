@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library Admin. Users</title>
+</head>
+<body>
+
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-lg mx-auto my-2">
+
+            <form th:method="post"
+                  th:action="@{/admin/users/roles/update} ">
+
+            <h4>Изменение роли пользователя с id: <span th:text="${request.id}"></span></h4>
+                <input type="hidden" th:field="*{request.id}" />
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr class="table-success">
+                        <th class="col">Текущие роли пользователя</th>
+                        <th class="col">Роли после обновления</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <ul th:each="cr : ${currentRoles}" >
+                                <li th:text="${cr.name}" >role name</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <select id="roles" name="genresIds" multiple class="form-select" th:field="*{request.newRoles}">
+                                <option th:each="role : ${roles}"
+                                        th:value="${role.id}"
+                                        th:text="${role.name}">
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary my-3">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

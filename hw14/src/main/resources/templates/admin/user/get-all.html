@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <th:block th:insert="~{fragments/header :: head}"/>
+
+  <title>Library Admin. Users</title>
+</head>
+<body>
+
+<div class="container">
+  <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+  <div class="container my-4">
+
+    <div class="container-lg mx-auto my-2">
+      <h4>Сводная информация по пользователям</h4>
+
+      <nav aria-label="Pagination" th:if="${totalPages > 0}">
+        <th:block
+                th:insert="~{fragments/pagination :: pagable(${totalPages}, ${currentPage}, page, '/books/all')}"/>
+      </nav>
+
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr class="table-success">
+          <th class="col">Id</th>
+          <th class="col">Username</th>
+          <th class="col">Firstname</th>
+          <th class="col">Lastname</th>
+          <th class="col">email</th>
+          <th class="col">is Enabled</th>
+          <th class="col">is AccountLocked</th>
+          <th class="col">Roles</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="u : ${userList}">
+          <td th:text="${u.id}">Id</td>
+          <td th:text="${u.username}">Username</td>
+          <td th:text="${u.firstname}">Firstname</td>
+          <td th:text="${u.lastname}">Lastname</td>
+          <td th:text="${u.email}">email</td>
+          <td th:text="${u.isEnabled}">isEnabled</td>
+          <td th:text="${u.isAccountLocked}">isAccountLocked</td>
+          <td>
+            <ul>
+              <li th:each="role : ${u.roles}" th:text="${role.name}">role name</li>
+            </ul>
+            <a th:href="@{/admin/users/{id}/roles/change(id=${u.id})}"
+               class="btn btn-info mx-2">Изменить</a>
+          </td>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

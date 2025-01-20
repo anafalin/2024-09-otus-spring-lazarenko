@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:insert="~{fragments/header :: head}"/>
     <title>Library: Все книги</title>
@@ -40,7 +41,7 @@
                         </ul>
                     </td>
                     <td>
-                        <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-info mx-2">Редактировать</a>
+                        <a sec:authorize="hasRole('ROLE_EDITOR')" th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-info mx-2">Редактировать</a>
                         <a th:href="@{/comments/{bookId}(bookId=${book.id})}" class="btn btn-warning mx-2">Комментарии</a>
                         <a th:href="@{/comments/create/{bookId}(bookId=${book.id})}" class="btn btn-success mx-2">Добавить комментарий</a>
                     </td>

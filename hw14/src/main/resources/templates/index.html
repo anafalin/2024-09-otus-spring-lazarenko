@@ -11,26 +11,12 @@
 <div class="container">
     <th:block th:insert="~{fragments/navigation :: nav}"/>
 
-    <div class="container my-4">
-        <div sec:authorize="isAuthenticated()" class="container-lg mx-auto my-2">
-            <p>Здравствуйте, <span sec:authentication="name"></span>!</p>
-            <p>И помните...</p>
-        </div>
-        <h2 class="my-2" style="text-align: center; color: #010187; font-weight: bold">
-            День, в котором было познано что-то новое, считается днем, прожитым не зря!
-        </h2>
+    <div sec:authorize="isAuthenticated()">
+        <th:block th:insert="~{fragments/mainpage/isAuthenticated :: main}"/>
+    </div>
 
-        <div class="container my-2 col-12 rounded d-flex align-items-center">
-            <img class="img-thumbnail rounded me-3" alt="Books' cat" src="/img/main.jpg"
-                 style="max-width: 240px"/>
-            <div>
-                <div class="container my-2">Знакомьтесь с книжными новинками. Читайте отзывы на книги. Делитесь своим
-                    мнением.
-                </div>
-                <div class="container my-2">Воспользуйтесь рекомендациями. Найдите единомышленников.</div>
-                <div class="container my-2">Организуйте библиотеку прочитанного и желаемого к прочтению.</div>
-            </div>
-        </div>
+    <div sec:authorize="!isAuthenticated()">
+        <th:block th:insert="~{fragments/mainpage/isNotAuthenticated :: main}"/>
     </div>
 </div>
 </body>
