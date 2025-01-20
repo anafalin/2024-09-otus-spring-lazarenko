@@ -22,10 +22,13 @@
                         <a href="/books/create" class="nav-link">Создать книгу</a>
                     </li>
                     <li>
-                        <form th:action="@{/books/find}" method="get" class="d-flex ml-3" role="search">
-                            <input th:name="bookId" class="form-control me-2" type="search"
+                        <form th:action="@{/books/find}" method="get" class="d-flex ml-3" role="search"
+                              onsubmit="return validateForm()">
+                            <input th:name="bookId" id="bookId" class="form-control me-2" type="search"
                                    placeholder="Поиск книги по Id:" aria-label="Поиск книги по Id:">
-                            <button class="btn btn-outline-success" type="submit">Поиск</button>
+                            <button class="btn btn-outline-success" type="submit" id="searchButton" disabled>Поиск</button>
+                            <!-- Validation search form -->
+                            <script src="/js/search-validation.js"></script>
                         </form>
                     </li>
                 </ul>
@@ -37,6 +40,7 @@
             </div>
             <div>
                 <a sec:authorize="!isAuthenticated()" class="btn btn-success mx-2" th:href="@{login}">Вход</a>
+                <a sec:authorize="!isAuthenticated()" class="btn btn-outline-light mx-2" th:href="@{/signup}">Регистрация</a>
                 <a sec:authorize="isAuthenticated()" class="btn btn-outline-light mx-2" th:href="@{logout}">Выход</a>
             </div>
         </div>

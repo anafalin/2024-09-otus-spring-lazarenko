@@ -1,4 +1,4 @@
-package ru.otus.hw.security;
+package ru.otus.hw.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.otus.hw.security.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,15 @@ public class UserApp {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "firstname", nullable = false, length = 50)
+    private String firstname;
+
+    @Column(name = "lastname", nullable = false, length = 50)
+    private String lastname;
+
+    @Column(name = "email", nullable = false, length = 50, unique = true)
+    private String email;
 
     @Column(name = "is_enabled", nullable = false)
     private Boolean isEnabled = true;

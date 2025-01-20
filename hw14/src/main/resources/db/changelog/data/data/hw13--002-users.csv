@@ -1,4 +1,4 @@
-username;password
-admin;$2a$10$Dco01cWfAGLpN1RUetSa2OSGcXQZVGmVx4qnE9IC38tVhzKTy/kpW
-user_1;$2a$10$RYws8w/tZD5gN8G9XuOSAeO8nK26rtyjJ3SL5r5O0sMy0etszy62K
-user_2;2a$10$F5.vBSRq62EPghTwqB1uOeSfpCDnfTe9REVRBkPavxTY5zBvPBJKy
+username;firstname;lastname;email;password
+admin;admin;admin;admin@mail.ru;$2a$10$Dco01cWfAGLpN1RUetSa2OSGcXQZVGmVx4qnE9IC38tVhzKTy/kpW
+user_1;user1;user1;user1@mail.ru;$2a$10$RYws8w/tZD5gN8G9XuOSAeO8nK26rtyjJ3SL5r5O0sMy0etszy62K
+user_2;user2;user2;user2@mail.ru;2a$10$F5.vBSRq62EPghTwqB1uOeSfpCDnfTe9REVRBkPavxTY5zBvPBJKy

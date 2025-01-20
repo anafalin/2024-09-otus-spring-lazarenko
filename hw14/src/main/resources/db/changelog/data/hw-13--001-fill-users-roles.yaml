@@ -19,7 +19,7 @@ databaseChangeLog:
       changes:
         - loadUpdateData:
             relativeToChangelogFile: true
-            primaryKey: username, password
+            primaryKey: username, firstname, lastname, email, password
             file: data/hw13--002-users.csv
             separator: ;
             encoding: UTF-8

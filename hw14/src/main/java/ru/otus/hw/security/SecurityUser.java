@@ -3,6 +3,7 @@ package ru.otus.hw.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.otus.hw.models.UserApp;
 
 import java.util.Collection;
 import java.util.List;
