@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserRoleUpdateDto {
-    public Long id;
+    private Long id;
 
     private List<Integer> newRoles;
 }

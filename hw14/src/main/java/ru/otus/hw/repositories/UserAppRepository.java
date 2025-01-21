@@ -1,6 +1,5 @@
 package ru.otus.hw.repositories;
 
-import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.otus.hw.models.UserApp;

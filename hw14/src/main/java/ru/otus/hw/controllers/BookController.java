@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +59,6 @@ public class BookController {
         return "/books/get-all";
     }
 
-    @PreAuthorize("hasRole('EDITOR')")
     @GetMapping("/create")
     public String getCreateBookPage(Model model) {
         model.addAttribute("book", new BookCreateRequest());
@@ -70,7 +68,6 @@ public class BookController {
         return "/books/create-form";
     }
 
-    @PreAuthorize("hasRole('EDITOR')")
     @PostMapping("/create")
     public String createBook(@ModelAttribute BookCreateRequest request, Model model) {
         if (request.getGenreIds().isEmpty()) {

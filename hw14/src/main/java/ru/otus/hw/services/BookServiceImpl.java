@@ -36,6 +36,8 @@ public class BookServiceImpl implements BookService {
 
     private final CommentRepository commentRepository;
 
+    private final AclServiceWrapperService aclServiceWrapperService;
+
     @Override
     @Transactional(readOnly = true)
     public Optional<BookDto> findById(Long id) {
@@ -52,7 +54,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDto save(String title, Long authorId, Set<Long> genresIds) {
-        return save(null, title, authorId, genresIds);
+        BookDto savedBook = save(null, title, authorId, genresIds);
+        aclServiceWrapperService.createPermission(savedBook);
+        return savedBook;
     }
 
     @Override
