@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookCreateRequest;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateRequest;
 import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.dto.UpdateBookRequest;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.mapper.BookMapper;
 import ru.otus.hw.services.AuthorService;
@@ -102,7 +102,7 @@ public class BookController {
     }
 
     @PostMapping("/edit")
-    public String updateBook(@ModelAttribute("book") UpdateBookRequest request) {
+    public String updateBook(@ModelAttribute("book") BookUpdateRequest request) {
         bookService.update(request.getId(), request.getTitle(), request.getAuthorId(),
                 request.getGenreIds().stream().filter(Objects::nonNull).collect(Collectors.toSet()));
         return "redirect:/";

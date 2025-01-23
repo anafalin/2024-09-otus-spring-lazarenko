@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateBookRequest {
+public class BookUpdateRequest {
     private Long id;
 
     private String title;

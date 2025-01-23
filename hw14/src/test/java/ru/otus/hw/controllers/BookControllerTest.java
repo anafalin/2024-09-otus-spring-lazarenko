@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.config.SecurityConfig;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateRequest;
 import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.dto.UpdateBookRequest;
 import ru.otus.hw.mapper.BookMapper;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
@@ -105,7 +105,7 @@ class BookControllerTest {
         when(genreService.findAll())
                 .thenReturn(List.of(new GenreDto(1L, "Genre Name")));
         when(bookMapper.toUpdateBookRequest(any()))
-                .thenReturn(new UpdateBookRequest(bookDto.getId(), bookDto.getTitle(), bookDto.getAuthor().getId(),
+                .thenReturn(new BookUpdateRequest(bookDto.getId(), bookDto.getTitle(), bookDto.getAuthor().getId(),
                         bookDto.getGenres().stream().map(GenreDto::getId).collect(Collectors.toList())));
 
         mockMvc.perform(get("/books/edit/1")

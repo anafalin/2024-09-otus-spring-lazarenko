@@ -3,8 +3,8 @@ package ru.otus.hw.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateRequest;
 import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.dto.UpdateBookRequest;
 import ru.otus.hw.models.Book;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface BookMapper {
 
     @Mapping(target = "genreIds", expression = "java(toGenreIds(book.getGenres()))")
     @Mapping(target = "authorId", expression = "java(book.getAuthor().getId())")
-    UpdateBookRequest toUpdateBookRequest(BookDto book);
+    BookUpdateRequest toUpdateBookRequest(BookDto book);
 
     // Метод для конвертации List<Genre> в List<Long>
     default List<Long> toGenreIds(List<GenreDto> genres) {

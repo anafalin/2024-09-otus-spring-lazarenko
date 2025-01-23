@@ -21,7 +21,7 @@ public class AppUserCreateRequest {
     private String username;
 
     @NotEmpty(message = "Введите пароль")
-    @Pattern(regexp = "[A-Za-z0-9._]{5,15}",
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{5,15}",
             message = "Пароль должен содержать от 5 до 15 символов и состоять из заглавных, строчных букв и цифр")
     private String password;
 

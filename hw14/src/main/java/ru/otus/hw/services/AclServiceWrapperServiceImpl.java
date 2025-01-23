@@ -1,5 +1,6 @@
 package ru.otus.hw.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
@@ -13,13 +14,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AclServiceWrapperServiceImpl implements AclServiceWrapperService {
 
     private final MutableAclService mutableAclService;
-
-    public AclServiceWrapperServiceImpl(MutableAclService mutableAclService) {
-        this.mutableAclService = mutableAclService;
-    }
 
     @Override
     public void createPermission(Object object) {

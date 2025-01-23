@@ -18,11 +18,14 @@ import ru.otus.hw.mapper.GenreMapperImpl;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
+import ru.otus.hw.security.acl.AclConfig;
 import ru.otus.hw.testObjects.GeneratorData;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Сервис по работе с книгами ")
 @DataJpaTest
-@Import({BookServiceImpl.class, BookMapperImpl.class, AuthorMapperImpl.class, GenreMapperImpl.class})
+@Import({BookServiceImpl.class, BookMapperImpl.class, AuthorMapperImpl.class, GenreMapperImpl.class,
+        AclServiceWrapperServiceImpl.class, AclConfig.class})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class BookServiceImplTest {
 
@@ -230,5 +234,15 @@ public class BookServiceImplTest {
         // verification
         Optional<BookDto> deletedBook = bookService.findById(deltableBook.getId());
         assertThat(deletedBook).isNotPresent();
+    }
+
+    @Test
+    void testPass() {
+        String pass = "Qwerty123";
+        Pattern p = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{5,15}");
+//        Pattern p = Pattern.compile("[A-Za-z0-9._]{5,15}");
+
+        Matcher m = p.matcher(pass);
+        System.out.println(m.matches());
     }
 }
