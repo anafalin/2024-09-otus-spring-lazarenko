@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,9 +49,7 @@ public class BookController {
 
         Page<BookDto> pageBooks = bookService.findAll(paging);
 
-        List<BookDto> books = pageBooks.getContent();
-
-        model.addAttribute("books", books);
+        model.addAttribute("books", pageBooks.getContent());
         model.addAttribute("currentPage", pageBooks.getNumber() + 1);
         model.addAttribute("totalItems", pageBooks.getTotalElements());
         model.addAttribute("totalPages", pageBooks.getTotalPages());
@@ -91,6 +90,7 @@ public class BookController {
         return "/books/get-book";
     }
 
+    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.dto.BookDto', 'WRITE')")
     @GetMapping("/edit/{id}")
     public String getUpdateBookPage(@PathVariable("id") long id, Model model) {
         BookDto book = bookService.findById(id)
@@ -101,6 +101,7 @@ public class BookController {
         return "/books/edit-form";
     }
 
+    @PreAuthorize("hasPermission(#request.id, 'ru.otus.hw.dto.BookDto', 'WRITE')")
     @PostMapping("/edit")
     public String updateBook(@ModelAttribute("book") BookUpdateRequest request) {
         bookService.update(request.getId(), request.getTitle(), request.getAuthorId(),
@@ -108,27 +109,21 @@ public class BookController {
         return "redirect:/";
     }
 
+    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.dto.BookDto', 'WRITE')")
     @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable("id") Long id) {
         bookService.deleteById(id);
         return "redirect:/";
     }
 
-    @GetMapping("owners/userId/manage")
+    @GetMapping("/owners/userId/manage")
     public String getAllBooksByOwner(@RequestParam(defaultValue = "1") int page,
-                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(defaultValue = "50") int size,
                                      Model model) {
         Pageable paging = PageRequest.of(page - 1, size);
 
         List<BookDto> books = bookService.findAllOwnersBook(paging);
-
-
         model.addAttribute("books", books);
-//        model.addAttribute("currentPage", pageBooks.getNumber() + 1);
-//        model.addAttribute("totalItems", pageBooks.getTotalElements());
-//        model.addAttribute("totalPages", pageBooks.getTotalPages());
-//        model.addAttribute("pageSize", size);
-
         return "/books/get-owner-books";
     }
 

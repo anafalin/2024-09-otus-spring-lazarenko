@@ -3,10 +3,12 @@ package ru.otus.hw.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +26,14 @@ import ru.otus.hw.testObjects.GeneratorData;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 @DisplayName("Сервис по работе с книгами ")
 @DataJpaTest
@@ -42,6 +44,9 @@ public class BookServiceImplTest {
 
     @Autowired
     private BookServiceImpl bookService;
+
+    @Mock
+    private AclServiceWrapperService aclServiceWrapperService;
 
     private List<Author> dbAuthors;
 
@@ -102,6 +107,7 @@ public class BookServiceImplTest {
         assertThat(actualBook).isEmpty();
     }
 
+    @WithMockUser(roles = "USER")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять книгу")
     @Test
@@ -109,6 +115,9 @@ public class BookServiceImplTest {
         // input data
         Book expectedBook = new Book(null, "Book_New", dbAuthors.get(0),
                 List.of(dbGenres.get(0), dbGenres.get(1)));
+
+        // Mock the behavior of aclServiceWrapperService
+        doNothing().when(aclServiceWrapperService).createPermission(any(BookDto.class));
 
         // testing
         BookDto insertedBook = bookService.save(
@@ -234,15 +243,5 @@ public class BookServiceImplTest {
         // verification
         Optional<BookDto> deletedBook = bookService.findById(deltableBook.getId());
         assertThat(deletedBook).isNotPresent();
-    }
-
-    @Test
-    void testPass() {
-        String pass = "Qwerty123";
-        Pattern p = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{5,15}");
-//        Pattern p = Pattern.compile("[A-Za-z0-9._]{5,15}");
-
-        Matcher m = p.matcher(pass);
-        System.out.println(m.matches());
     }
 }

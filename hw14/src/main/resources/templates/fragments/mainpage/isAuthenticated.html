@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div sec:authorize="hasRole('ROLE_USER')" class="my-3">
+        <div sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_EDITOR')" class="my-3">
             <div class="box">
                 <img src="/img/create-book.png" class="img-thumbnail" alt="...">
                 <a href="/books/create">Создать книгу</a>
@@ -41,7 +41,6 @@
                 <a href="/admin/users">Информация по пользователям</a>
             </div>
         </div>
-
 
     </div>
 </div>

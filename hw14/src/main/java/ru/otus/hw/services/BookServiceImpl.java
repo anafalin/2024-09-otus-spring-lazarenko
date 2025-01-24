@@ -48,7 +48,8 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     public Page<BookDto> findAll(Pageable paging) {
         Page<Book> booksPage = bookRepository.findAll(paging);
-        return new PageImpl<>(bookMapper.toBookDtos(booksPage.getContent()));
+        return new PageImpl<>(bookMapper.toBookDtos(booksPage.getContent()),
+                booksPage.getPageable(), booksPage.getTotalElements());
     }
 
     @Override
