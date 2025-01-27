@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create-table-products" author="Anastasia Lazarenko">
+        <createTable tableName="products">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_products"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article_number" type="varchar(10)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1000)"/>
+            <column name="price" type="numeric(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="bigint" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-subscriptions" author="Anastasia Lazarenko">
+        <createTable tableName="subscriptions">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_subscriptions"/>
+            </column>
+            <column name="client_email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

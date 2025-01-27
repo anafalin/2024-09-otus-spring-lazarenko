@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: initial-fill-products-table
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: name,article_number,description,price,quantity
+            file: 001--initial-fill-products-table.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: products
+
+  - changeSet:
+      id: initial-fill-subscriptions-table
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: client_email,product_id,product_name
+            file: 002--initial-fill-subscriptions-table.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: subscriptions

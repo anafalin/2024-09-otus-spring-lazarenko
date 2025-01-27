@@ -1,10 +1,10 @@
 spring:
   mail:
     username: application@mail.ru
-#    host: smtp.yandex.ru
-#    password: password
-#    port: 465
-#    protocol: smtps
+  #    host: smtp.yandex.ru
+  #    password: password
+  #    port: 465
+  #    protocol: smtps
 
   datasource:
     url: jdbc:h2:mem:warehouse

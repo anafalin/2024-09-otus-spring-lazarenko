@@ -1,0 +1,8 @@
+client_email;product_id;product_name
+user1@mail.ru;1;Product1
+user1@mail.ru;2;Product2
+user2@google.com;2;Product2
+user3@rambler.com;3;Product3
+user4@yandex.com;1;Product1
+user4@yandex.com;3;Product3
+user4@yandex.com;5;Product5
