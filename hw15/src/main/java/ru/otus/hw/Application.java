@@ -32,7 +32,7 @@ public class Application {
     private Map<Long, Integer> generateProductIdAmountMap() {
         Map<Long, Integer> productIdAmountMap = new HashMap<>();
             int quantity = (int) (Math.random() * 100 + 1);
-            long productId = (long)((Math.random() * 5) + 1);
+            long productId = (long)(Math.random() * 5) + 1;
             productIdAmountMap.put(productId, quantity);
             log.info("Поступление {} - {}", productId, quantity);
 
