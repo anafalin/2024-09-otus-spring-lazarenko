@@ -39,40 +39,43 @@ public class ProductService {
         session.doWork(connection -> updateProductsQuantity(productIdAmountMap, connection));
     }
 
-    private void updateProductsQuantity(Map<Long, Integer> productIdAmountMap, Connection connection)
-            throws SQLException {
+    public void updateProductsQuantity(Map<Long, Integer> productIdAmountMap, Connection connection) throws SQLException {
         try (Statement stmt = connection.createStatement();
              PreparedStatement psUpdate = connection.prepareStatement(SQL_UPDATE)) {
             connection.setAutoCommit(false);
 
             int rowCounter = 0;
 
-            ResultSet resultSetProducts = stmt.executeQuery(preparedSelectQueryForUpdate(productIdAmountMap));
+            try (ResultSet resultSetProducts = stmt.executeQuery(preparedSelectQueryForUpdate(productIdAmountMap))) {
+                while (resultSetProducts.next()) {
+                    Long id = (Long) resultSetProducts.getObject("id");
+                    String name = resultSetProducts.getString("name");
+                    Long currentAmount = (Long) resultSetProducts.getObject("quantity");
+                    psUpdate.setLong(1, currentAmount + productIdAmountMap.get(id));
+                    psUpdate.setLong(2, id);
+                    psUpdate.addBatch();
 
-            while (resultSetProducts.next()) {
-                Long id = (Long) resultSetProducts.getObject("id");
-                String name = resultSetProducts.getString("name");
-                Long currentAmount = (Long) resultSetProducts.getObject("quantity");
-                psUpdate.setLong(1, currentAmount + productIdAmountMap.get(id));
-                psUpdate.setLong(2, id);
-                psUpdate.addBatch();
+                    executeNotifyProductArrival(currentAmount, id, name);
 
-                executeNotifyProductArrival(currentAmount, id, name);
-
-                if (++rowCounter % batchSize == 0) {
-                    psUpdate.executeBatch();
-                    psUpdate.clearBatch();
-                    rowCounter = 0;
+                    if (++rowCounter % batchSize == 0) {
+                        psUpdate.executeBatch();
+                        psUpdate.clearBatch();
+                        rowCounter = 0;
+                    }
                 }
-            }
 
-            psUpdate.executeBatch();
-            connection.commit();
+                psUpdate.executeBatch();
+                connection.commit();
+            }
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
     private void executeNotifyProductArrival(Long currentAmount, Long id, String name) {
-        if(currentAmount == 0) {
+        if (currentAmount == 0) {
             productGateway.notifyProductArrival(new ProductInfoNotificationDto(id, name));
         }
     }
