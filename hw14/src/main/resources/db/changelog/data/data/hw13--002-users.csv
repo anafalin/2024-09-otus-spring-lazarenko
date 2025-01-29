@@ -1,0 +1,5 @@
+username;firstname;lastname;email;password
+admin;admin;admin;admin@mail.ru;$2a$10$Dco01cWfAGLpN1RUetSa2OSGcXQZVGmVx4qnE9IC38tVhzKTy/kpW
+supervisor;supervisor;supervisor;supervisor@mail.ru;$2a$10$1BDVFM8CjF/MC9CJoPn4C.ZHAJveRxpmnMOXpuv9Yvj0qHfmCivy6
+user1;user1;user1;user1@mail.ru;$2a$10$WnpbG.mmqzFyVC1g4zZTw.SAb9zcUEfl57eNHrD4LaWV4sF6U4ieK
+user2;user2;user2;user2@mail.ru;$2a$10$m4LB5Zw5UOAs0zRArkpUx.GZvToPrUtrJVU7CpXMn3wJ3/s3P5/6y

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library: Регистрация</title>
+</head>
+<body>
+
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container col-lg-6">
+            <h3 class="text-center">Регистрация</h3>
+
+            <div class="alert alert-danger my-3" role="alert"
+                 th:if="${!#strings.isEmpty(userRegDataError)}"
+                 th:text="${userRegDataError}"></div>
+
+            <form th:action="@{/signup}"
+                  th:object="${user}"
+                  th:method="post">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Логин</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username"
+                           th:field="*{username}">
+                    <span class="validationError"
+                          th:if="${#fields.hasErrors('username')}"
+                          th:errors="*{username}">Name Error
+                </span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="text" class="form-control" id="email" placeholder="email@email.com"
+                           th:field="*{email}">
+                    <span class="validationError"
+                          th:if="${#fields.hasErrors('email')}"
+                          th:errors="*{email}">Name Error
+                </span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="Имя"
+                           th:field="*{firstname}">
+                    <span class="validationError"
+                          th:if="${#fields.hasErrors('firstname')}"
+                          th:errors="*{firstname}">Name Error
+                </span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Фамилия</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Фамилия"
+                           th:field="*{lastname}">
+                    <span class="validationError"
+                          th:if="${#fields.hasErrors('lastname')}"
+                          th:errors="*{lastname}">Name Error
+                </span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="password"
+                           th:field="*{password}">
+                    <span class="validationError"
+                          th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}">Name Error
+                </span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="passwordConfirm" class="form-label">Подтверждение пароля</label>
+                    <input type="password" class="form-control" id="passwordConfirm"
+                           th:field="*{passwordConfirm}">
+                    <span class="validationError"
+                          th:if="${#fields.hasErrors('passwordConfirm')}"
+                          th:errors="*{passwordConfirm}">Name Error
+                </span>
+                    <span class="validationError"
+                          th:if="${!#strings.isEmpty(passwordConfirmError)}"
+                          th:text="${passwordConfirmError}">Name Error
+                </span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

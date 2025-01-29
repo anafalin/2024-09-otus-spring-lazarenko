@@ -1,0 +1,11 @@
+.validationError {
+    color: red;
+}
+
+.infoMessage {
+    background-color: #23bf23;
+    margin: 15px 0;
+    padding: 7px;
+    max-width: 220px;
+    border-radius: 8px;
+}
