@@ -1,0 +1,115 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- содержит пользователей и роли, которым будут даваться разрешения   -->
+    <!-- sid содержит либо имя пользователя, либо название роли -->
+    <changeSet id="create-table-acl-sid" author="Lazarenko Anastasia">
+        <createTable tableName="acl_sid" remarks="Create table acl_sid">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="principal" type="tinyint(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sid" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="acl_sid" columnNames="sid, principal" constraintName="uk_acl_sid"/>
+    </changeSet>
+
+    <changeSet id="create-table-acl-class" author="Lazarenko Anastasia">
+        <createTable tableName="acl_class">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="class" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="acl_class" columnNames="class" constraintName="uk_acl_class"/>
+    </changeSet>
+
+    <changeSet id="create-table-acl-object-identity" author="Lazarenko Anastasia">
+        <createTable tableName="acl_object_identity">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="object_id_class" type="bigint(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="object_id_identity" type="bigint(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_object" type="bigint(20)" defaultValue="null"/>
+            <column name="owner_sid" type="bigint(20)" defaultValue="null"/>
+            <column name="entries_inheriting" type="tinyint(1)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="acl_object_identity" columnNames="object_id_class, object_id_identity"
+                             constraintName="uk_acl_object_identity"/>
+
+        <addForeignKeyConstraint baseTableName="acl_object_identity" baseColumnNames="parent_object"
+                                 constraintName="fk_parent_object"
+                                 referencedTableName="acl_object_identity"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="acl_object_identity" baseColumnNames="object_id_class"
+                                 constraintName="fk_object_id_class"
+                                 referencedTableName="acl_class"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="acl_object_identity" baseColumnNames="owner_sid"
+                                 constraintName="fk_owner_sid"
+                                 referencedTableName="acl_sid"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- acl_sid - кому дается разрешение -->
+    <!-- acl_object_identity — на какой объект оно дается -->
+    <!-- mask — какое именно разрешение -->
+    <changeSet id="create-table-acl-entry" author="Lazarenko Anastasia">
+        <createTable tableName="acl_entry">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="acl_object_identity" type="bigint(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ace_order" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sid" type="bigint(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mask" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="granting" type="tinyint(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_success" type="tinyint(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_failure" type="tinyint(1)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="acl_entry" columnNames="acl_object_identity, ace_order"
+                             constraintName="uk_acl_entry"/>
+
+        <addForeignKeyConstraint baseTableName="acl_entry" baseColumnNames="acl_object_identity"
+                                 constraintName="fk_acl_object_identity"
+                                 referencedTableName="acl_object_identity"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="acl_entry" baseColumnNames="sid"
+                                 constraintName="fk_sid"
+                                 referencedTableName="acl_sid"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

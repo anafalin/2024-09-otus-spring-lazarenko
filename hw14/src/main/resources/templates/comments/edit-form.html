@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments/header :: head}"/>
+
+    <title>Library: Редактирование комментария</title>
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{fragments/navigation :: nav}"/>
+
+    <div class="container my-4">
+
+        <div class="container-sm mx-auto my-2">
+            <h2>Редактирование комментария</h2>
+
+            <form id="edit-form" th:method="post" th:action="@{/comments/edit/{id}(id=${comment.id})}" th:object="${comment}">
+
+                <input type="hidden" th:field="*{bookId}" th:value="*{bookId}"/>
+
+                <div class="row my-2">
+                    <textarea class="form-control" id="book-title" name="title" th:value="*{text}"
+                                                              required th:field="*{text}">
+                    </textarea>
+                </div>
+                <div class="row my-2">
+                    <div>Дата создания:</div>
+                    <div><span th:text="${comment.createdAt}"></span></div>
+                </div>
+
+                <div class="coll-2 m-2 p-2 d-flex justify-content-start">
+                    <div>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="coll-2 m-2 p-2 d-flex justify-content-start">
+                <div class="m-2">
+                    <a th:href="@{/}">
+                        <button type="button" class="btn btn-secondary">Отмена</button>
+                    </a>
+                </div>
+                <form th:method="post" th:action="@{/comments/delete/{id}(id=${comment.id})}" class="m-2">
+                    <button class="btn btn-danger" type="submit">Удалить</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

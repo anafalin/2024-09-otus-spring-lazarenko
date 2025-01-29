@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="main" class="container d-flex">
+    <div class="flex-grow-1 col-sm-8 my-4">
+        <h2>Здравствуйте, <span sec:authentication="name"></span>!</h2>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="my-3">
+            <form th:action="@{/books/find}" method="get" class="d-flex my-2" role="search"
+                  onsubmit="return validateForm()">
+                <input th:name="bookId" id="bookId" class="form-control" type="search"
+                       placeholder="Поиск книги по Id:" aria-label="Поиск книги по Id:">
+                <button class="btn btn-success" type="submit" id="searchButton" disabled>Поиск</button>
+                <!-- Validation search form -->
+                <script src="/js/search-validation.js"></script>
+            </form>
+        </div>
+
+        <div class="my-3">
+            <div class="box">
+                <img src="/img/owners-books.ico" class="img-thumbnail" alt="...">
+                <a th:href="@{/books/owners/userId/manage}">
+                    Управление собственными книгами
+                </a>
+            </div>
+        </div>
+
+        <div sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_EDITOR')" class="my-3">
+            <div class="box">
+                <img src="/img/create-book.png" class="img-thumbnail" alt="...">
+                <a href="/books/create">Создать книгу</a>
+            </div>
+        </div>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="my-3">
+            <h4>Функции Администратора</h4>
+            <div class="box">
+                <img src="/img/users.png" class="img-thumbnail" alt="...">
+                <a href="/admin/users">Информация по пользователям</a>
+            </div>
+        </div>
+
+    </div>
+</div>
