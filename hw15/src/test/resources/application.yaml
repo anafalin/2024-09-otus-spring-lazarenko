@@ -1,0 +1,32 @@
+spring:
+  mail:
+    username: application@mail.ru
+  #    host: smtp.yandex.ru
+  #    password: password
+  #    port: 465
+  #    protocol: smtps
+
+  datasource:
+    url: jdbc:h2:mem:warehouse
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    generate-ddl: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog.xml
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+app:
+  product:
+    path:
+      url: http://localhost:8080/products/
