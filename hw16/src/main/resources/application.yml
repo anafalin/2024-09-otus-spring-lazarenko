@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: none #режим DDL
+    show-sql: true #печать sql-запросы
+    generate-ddl: false #инициализация схемы при запуске
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    enabled: true
+
+  data:
+    rest:
+      base-path: "/api/v1/"
+      detection-strategy: all
+
+  jmx:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  file:
+    name: logfile.log
+  level:
+    root: info
