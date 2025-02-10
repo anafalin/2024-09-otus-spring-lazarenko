@@ -41,3 +41,5 @@ logging:
     name: logfile.log
   level:
     root: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
