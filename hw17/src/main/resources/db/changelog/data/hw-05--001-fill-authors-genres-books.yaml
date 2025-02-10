@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: hw05--001-authors
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: full_name
+            file: data/hw05--001-authors.csv
+            encoding: UTF-8
+            tableName: authors
+
+  - changeSet:
+      id: hw05--002-genres
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: name
+            file: data/hw05--002-genres.csv
+            encoding: UTF-8
+            tableName: genres
+
+  - changeSet:
+      id: hw05--003-books
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            file: data/hw05--003-books.csv
+            primaryKey: title,author_id
+            separator: ;
+            encoding: UTF-8
+            tableName: books
+
+  - changeSet:
+      id: hw05--004-books-genres
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: book_id,genre_id
+            file: data/hw05--004-books-genres.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: books_genres
