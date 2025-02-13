@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: hw06--001-comments
+      author: Lazarenko Anastasia
+      context: data
+      changes:
+        - loadUpdateData:
+            relativeToChangelogFile: true
+            primaryKey: book_id,text,created_at
+            file: data/hw06--001-comments.csv
+            separator: ;
+            encoding: UTF-8
+            tableName: comments
